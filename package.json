@@ -4,6 +4,7 @@
   "description": "Beverage App for Anna Juice Ltd",
   "main": "beverage.js",
   "scripts": {
+    "nyc": "nyc mocha",
     "test": "mocha"
   },
   "author": "",

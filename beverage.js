@@ -1,13 +1,14 @@
-const formatArgs = require('./src/utils').formatArgs;
-const getOperation = require("./src/utils").getOperation;
-const parseTransaction = require('./src/utils').parseTransaction;
+const fs = require("fs");
+const utils = require("./src/utils");
 
 const main = function(args) {
-   const userArgs = formatArgs(args);
-   const operation = getOperation(userArgs);
-   const transaction = parseTransaction(userArgs); 
-   const output = operation(transaction);
-   console.log(output);
+   const userArgs = utils.formatArgs(args);
+   const date = new Date()
+   const operation = utils.getOperation(userArgs);
+   const transaction = utils.parseTransaction(userArgs); 
+   const output = operation(transaction, date, fs.readFileSync, fs.writeFileSync);
+   const operationResult = utils.getOperationResult(output);
+   console.log(operationResult)
 };
 
 main(process.argv);
