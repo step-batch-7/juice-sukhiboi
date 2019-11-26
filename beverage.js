@@ -6,8 +6,8 @@ const main = function(args) {
    const date = new Date()
    const operation = utils.getOperation(userArgs);
    const transaction = utils.parseTransaction(userArgs); 
-   const output = operation(transaction, date, fs.readFileSync, fs.writeFileSync);
-   const operationResult = utils.getOperationResult(output);
+   const result = operation(transaction, date, fs.readFileSync, fs.writeFileSync);
+   const operationResult = utils.getOperationResult(result, userArgs);
    console.log(operationResult)
 };
 

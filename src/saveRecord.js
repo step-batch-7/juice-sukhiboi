@@ -1,5 +1,3 @@
-const fs = require("fs");
-
 const createTransactionRecord = function(transaction, date) {
   const record = {
     transaction: {

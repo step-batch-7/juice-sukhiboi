@@ -83,7 +83,7 @@ describe("#updateRecord()", () => {
 
 describe("#updateTransactions()", () => {
   const date = new Date();
-  it("should update the transaction with the given transaction if user doesn't exists", () => {
+  it("should update the transaction with the given transaction if employee doesn't exists", () => {
     const contents =
       '{"21":[{"beverage":"Orange","qty":"5","date":"2019-11-25T11:09:06.504Z"},{"beverage":"Orange","qty":"5","date":"2019-11-25T12:56:55.886Z"}]}';
     const record = {
@@ -97,7 +97,7 @@ describe("#updateTransactions()", () => {
       '"}]}';
     assert.deepStrictEqual(actual, expected);
   });
-  it("should update the transaction with the given transaction if user exists", () => {
+  it("should update the transaction with the given transaction if employee exists", () => {
     const contents =
       '{"21":[{"beverage":"Orange","qty":"5","date":"2019-11-25T11:09:06.504Z"},{"beverage":"Orange","qty":"5","date":"2019-11-25T12:56:55.886Z"}]}';
     const record = {
