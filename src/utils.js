@@ -26,12 +26,12 @@ const getOperation = function(args) {
 const parseTransaction = function(args) {
   const transactionObjects = {
     "--save": {
-      beverage: args[2],
-      empId: args[4],
-      qty: args[6]
+      "--beverage": "",
+      "--empId": "",
+      "--qty": ""
     },
     "--query": {
-      empId: args[2]
+      "--empId": ""
     }
   };
 
@@ -42,30 +42,41 @@ const parseTransaction = function(args) {
       error: "Invalid Command"
     };
   }
+  const options = args.slice(1);
+  for (let idx = 0; idx < options.length; idx += 2) {
+    transactionDetails[options[idx]] = options[idx + 1];
+  }
   return transactionDetails;
 };
 
 const saveRecordResult = function(operationResult) {
   const successMessage = "\nTransaction Recorded: \n";
   const headings = "EmployeeId, Beverage, Quantity, Date\n";
-  const transactionData = `${operationResult.empId}, ${operationResult.transaction.beverage}, ${
-    operationResult.transaction.qty
-  }, ${operationResult.transaction.date.toJSON()}`;
+  const transactionData = `${operationResult["--empId"]}, ${
+    operationResult.transaction["--beverage"]
+  }, ${operationResult.transaction["--qty"]}, ${operationResult.transaction[
+    "--date"
+  ].toJSON()}`;
   const result = successMessage + headings + transactionData;
   return result;
 };
 
 const queryRecordResult = function(operationResult) {
   const headings = "\nEmployeeId, Beverage, Quantity, Date\n";
-  const records = operationResult.transactionRecords.map((record) => {
-    recordDetails = `${operationResult.empId}, ${record.beverage}, ${record.qty}, ${record.date}`;;
+  const records = operationResult.transactionRecords.map(record => {
+    recordDetails = `${operationResult["--empId"]}, ${record["--beverage"]}, ${record["--qty"]}, ${record["--date"]}`;
     return recordDetails;
   });
-  const totalBeverages = operationResult.transactionRecords.reduce((context, record) => {
-    context = context + +record.qty;
-    return context;
-  }, 0);
-  const result = `${headings}${records.join("\n")}\n\nTotal: ${totalBeverages} Juices`;
+  const totalBeverages = operationResult.transactionRecords.reduce(
+    (context, record) => {
+      context = context + +record["--qty"];
+      return context;
+    },
+    0
+  );
+  const result = `${headings}${records.join(
+    "\n"
+  )}\n\nTotal: ${totalBeverages} Juices`;
   return result;
 };
 
