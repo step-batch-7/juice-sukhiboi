@@ -12,8 +12,11 @@ const createTransactionRecord = function(transaction, date) {
 
 const updateTransactions = function(content, record) {
   let records = JSON.parse(content);
-  if (records[record["--empId"]] == undefined) records[record["--empId"]] = [];
-  records[record["--empId"]].push(record.transaction);
+  const latestRecord = record["--empId"];
+  if (records[latestRecord] == undefined) {
+    records[latestRecord] = [];
+  }
+  records[latestRecord].push(record.transaction);
   const updatedRecords = JSON.stringify(records);
   return updatedRecords;
 };

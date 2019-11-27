@@ -1,8 +1,11 @@
 const assert = require("assert");
 const utils = require("./../src/utils");
+const chalk = require("chalk");
 
 const formatArgs = utils.formatArgs;
 const getOperation = utils.getOperation;
+const getTransactionPrototype = utils.getTransactionPrototype;
+const updateTransactionDetails = utils.updateTransactionDetails;
 const parseTransaction = utils.parseTransaction;
 const getOperationResult = utils.getOperationResult;
 const errorMessage = utils.errorMessage;
@@ -44,6 +47,52 @@ describe("#getOperation()", function() {
   });
 });
 
+describe("#getTransactionPrototype()", () => {
+  it("should return save transaction prototype when save command is given", () => {
+    const expected = {
+      "--beverage": undefined,
+      "--empId": undefined,
+      "--qty": undefined
+    };
+    const operation = "--save";
+    const actual = getTransactionPrototype(operation);
+    assert.deepStrictEqual(actual, expected)
+  });
+  it("should return query transaction prototype wrong query command is given", () => {
+    const expected = {
+      "--empId": undefined,
+      "--date": undefined
+    };
+    const operation = "--query";
+    const actual = getTransactionPrototype(operation);
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should return error when wrong command is given", () => {
+    const expected = { error: "Invalid Command" };
+    const operation = "--command";
+    const actual = getTransactionPrototype(operation);
+    assert.deepStrictEqual(actual, expected);
+  });
+});
+
+describe("#updateTransactionDetails()", () => {
+  it("should updtae the transaction details", () => {
+    const oldTransactionDetails = {
+      "--beverage": undefined,
+      "--empId": undefined,
+      "--qty": undefined
+    };
+    const args = "--save --beverage Orange --empId 11111 --qty 2".split(" ");
+    const actual = updateTransactionDetails(oldTransactionDetails, args);
+    const expected = {
+      "--beverage": "Orange",
+      "--empId": "11111",
+      "--qty": "2"
+    };
+    assert.deepStrictEqual(actual, expected);
+  });
+});
+
 describe("#parseTransaction()", function() {
   it("should return all the required transaction details when save command is given", function() {
     const userArgs = "--save --beverage Orange --empId 11111 --qty 1".split(
@@ -61,7 +110,8 @@ describe("#parseTransaction()", function() {
     const userArgs = "--query --empId 11111".split(" ");
     const actual = parseTransaction(userArgs);
     const expected = {
-      "--empId": "11111"
+      "--empId": "11111",
+      "--date": undefined
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -79,7 +129,7 @@ describe("#parseTransaction()", function() {
     const actual = parseTransaction(userArgs);
     const expected = {
       "--date": "2019-11-12",
-      "--empId": ""
+      "--empId": undefined
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -120,7 +170,7 @@ describe("#getOperationResult()", () => {
       error: "Invalid Command"
     };
     const actual = getOperationResult(errorObject);
-    const expected = "Invalid Command";
+    const expected = chalk.bold.red(`\nInvalid Command`);
     assert.deepStrictEqual(actual, expected);
   });
 });

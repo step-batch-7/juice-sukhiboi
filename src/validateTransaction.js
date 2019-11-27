@@ -1,46 +1,52 @@
+const invalidateTransactionObject = function(transaction, args) {
+  const optionValues = Object.values(transaction);
+
+  if (args[0] == "--query") {
+    const result = optionValues.some(function(option) {
+      return option != undefined;
+    });
+    return !result;
+  }
+
+  const result = optionValues.some(function(option) {
+    return option == undefined;
+  });
+  return result;
+};
+
 const isValidBeverage = function(beverage) {
-  if (beverage == undefined) return true;
-  return typeof beverage == "string";
+  return true;
 };
 
 const isValidQty = function(qty) {
   if (qty == undefined) return true;
-  const actualQty = Math.floor(qty);
-  const result = Number.isInteger(actualQty) && actualQty > 0;
-  return result;
+  return Number(qty) > 0;
 };
 
 const isValidEmpId = function(empId) {
-  if (empId == undefined || empId == "") return true;
-  const actualEmpId = Math.floor(empId);
-  const result = Number.isInteger(actualEmpId) && actualEmpId > 0;
-  return result;
+  if (empId == undefined) return true;
+  return Number(empId) > 0;
 };
 
 const isValidDate = function(date) {
   if (date == undefined) return true;
-  const actualDate = date.split("-");
-  if (actualDate.length != 3) return false;
-  if (actualDate[0] < 1) return false;
-  if (actualDate[1] > 12 || actualDate[1] < 1) return false;
-  if (actualDate[2] > 31 || actualDate[2] < 1) return false;
-  return true;
+  return date && new Date(date) != "Invalid Date";
 };
 
-const validateTransaction = function(transaction) {
+const validateTransaction = function(transaction, args) {
+  if (invalidateTransactionObject(transaction, args)) return false;
+
   const beverage = transaction["--beverage"];
   const qty = transaction["--qty"];
   const empId = transaction["--empId"];
   const date = transaction["--date"];
-  const validationResultBeverage = isValidBeverage(beverage);
-  const validationResultQty = isValidQty(qty);
-  const validationResultEmpId = isValidEmpId(empId);
-  const validationResultDate = isValidDate(date);
-  const result =
-    validationResultBeverage &&
-    validationResultQty &&
-    validationResultEmpId &&
-    validationResultDate;
+
+  const validBeverage = isValidBeverage(beverage);
+  const validQty = isValidQty(qty);
+  const validEmpId = isValidEmpId(empId);
+  const validDate = isValidDate(date);
+
+  const result = validBeverage && validQty && validEmpId && validDate;
   return result;
 };
 

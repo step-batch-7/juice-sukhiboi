@@ -2,6 +2,7 @@ const saveRecord = require("./saveRecord").saveRecord;
 const query = require("./query").query;
 const validateTransaction = require("./validateTransaction")
   .validateTransaction;
+const chalk = require('chalk');
 
 const formatArgs = function(args) {
   const userArgs = args.slice(2);
@@ -25,30 +26,43 @@ const getOperation = function(args) {
   return operation;
 };
 
-const parseTransaction = function(args) {
-  const transactionObjects = {
+const getTransactionPrototype = function(operation) {
+  const transactionPrototypes = {
     "--save": {
-      "--beverage": "",
-      "--empId": "",
-      "--qty": ""
+      "--beverage": undefined,
+      "--empId": undefined,
+      "--qty": undefined
     },
     "--query": {
-      "--empId": ""
+      "--empId": undefined,
+      "--date": undefined
     }
   };
 
+  const prototype = transactionPrototypes[operation];
+  const errorObj = { error: "Invalid Command" };
+  if (prototype == undefined) {
+    return errorObj;
+  }
+  return prototype;
+};
+
+const updateTransactionDetails = function(transactionDetails, args) {
+  let transaction = transactionDetails;
+  for (let idx = 1; idx < args.length; idx += 2) {
+    if (args[idx] in transaction) {
+      transaction[args[idx]] = args[idx + 1];
+    }
+  }
+  return transaction;
+};
+
+const parseTransaction = function(args) {
   const operation = args[0];
-  const transactionDetails = transactionObjects[operation];
-  if (transactionDetails == undefined) {
-    return {
-      error: "Invalid Command"
-    };
-  }
-  const options = args.slice(1);
-  for (let idx = 0; idx < options.length; idx += 2) {
-    transactionDetails[options[idx]] = options[idx + 1];
-  }
-  const result = validateTransaction(transactionDetails);
+  const transactionDetails = getTransactionPrototype(operation);
+  if (transactionDetails.error != undefined) return transactionDetails;
+  const transaction = updateTransactionDetails(transactionDetails, args);
+  const result = validateTransaction(transaction, args);
   if (result) return transactionDetails;
   return { error: "Invalid Options" };
 };
@@ -85,7 +99,7 @@ const queryRecordResult = function(operationResult) {
 };
 
 const getOperationResult = function(operationResult, userArgs) {
-  if (operationResult.error != undefined) return operationResult.error;
+  if (operationResult.error != undefined) return chalk.bold.red(`\n${operationResult.error}`);
   const results = {
     "--save": saveRecordResult,
     "--query": queryRecordResult
@@ -98,6 +112,8 @@ const getOperationResult = function(operationResult, userArgs) {
 
 exports.formatArgs = formatArgs;
 exports.getOperation = getOperation;
+exports.getTransactionPrototype = getTransactionPrototype;
+exports.updateTransactionDetails = updateTransactionDetails;
 exports.parseTransaction = parseTransaction;
 exports.getOperationResult = getOperationResult;
 exports.errorMessage = errorMessage;
