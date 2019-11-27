@@ -24,6 +24,7 @@ const filterRecords = function(records, transactions) {
 };
 
 const query = function(transaction, date, readFile) {
+  if (transaction.error != undefined) return transaction;
   const filename = "./beverageRecords.json";
   const contents = readFile(filename, "utf8");
   const records = JSON.parse(contents);
