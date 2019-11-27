@@ -1,5 +1,7 @@
 const saveRecord = require("./saveRecord").saveRecord;
 const query = require("./query").query;
+const validateTransaction = require("./validateTransaction")
+  .validateTransaction;
 
 const formatArgs = function(args) {
   const userArgs = args.slice(2);
@@ -47,7 +49,8 @@ const parseTransaction = function(args) {
     transactionDetails[options[idx]] = options[idx + 1];
   }
   const result = validateTransaction(transactionDetails);
-  return result;
+  if (result) return transactionDetails;
+  return { error: "Invalid Options" };
 };
 
 const saveRecordResult = function(operationResult) {
@@ -91,53 +94,6 @@ const getOperationResult = function(operationResult, userArgs) {
   const resultOperation = results[operation];
   const result = resultOperation(operationResult);
   return result;
-};
-
-const validateBeverage = function(beverage) {
-  if (beverage == undefined) return true;
-  return typeof beverage == "string";
-};
-
-const validateQty = function(qty) {
-  if (qty == undefined) return true;
-  const actualQty = Math.floor(qty);
-  const result = Number.isInteger(actualQty) && actualQty > 0;
-  return result;
-};
-
-const validateEmpId = function(empId) {
-  if (empId == undefined || empId == "") return true;
-  const actualEmpId = Math.floor(empId);
-  const result = Number.isInteger(actualEmpId) && actualEmpId > 0;
-  return result;
-};
-
-const validateDate = function(date) {
-  if (date == undefined) return true;
-  const actualDate = date.split("-");
-  if(actualDate.length!=3) return false;
-  if(actualDate[0]< 1) return false;
-  if(actualDate[1]>13 || actualDate[1]<1) return false;
-  if(actualDate[2]>31 || actualDate[2]<1) return false;
-  return true;
-};
-
-const validateTransaction = function(transaction) {
-  const beverage = transaction["--beverage"];
-  const qty = transaction["--qty"];
-  const empId = transaction["--empId"];
-  const date = transaction["--date"];
-  const validationResultBeverage = validateBeverage(beverage);
-  const validationResultQty = validateQty(qty);
-  const validationResultEmpId = validateEmpId(empId);
-  const validationResultDate = validateDate(date);
-  const result =
-    validationResultBeverage &&
-    validationResultQty &&
-    validationResultEmpId &&
-    validationResultDate;
-  if (result == true) return transaction;
-  return { error: "Invalid Options" };
 };
 
 exports.formatArgs = formatArgs;

@@ -3,7 +3,7 @@ const query = require("./../src/query").query;
 const filterRecords = require("./../src/query").filterRecords;
 
 describe("#filterRecords()", () => {
-  it("should filter records if only employee id is given", () => {
+  it("should filter records when only employee id is given", () => {
     const records = {
       "25": [
         {
@@ -25,7 +25,7 @@ describe("#filterRecords()", () => {
         }
       ]
     };
-    const transaction = {"--empId": "26"};
+    const transaction = { "--empId": "26" };
     const actual = filterRecords(records, transaction);
     const expected = [
       {
@@ -41,7 +41,7 @@ describe("#filterRecords()", () => {
     ];
     assert.deepStrictEqual(actual, expected);
   });
-  it("should filter records if employee id and a particular date is given", () => {
+  it("should filter records when employee id and a particular date is given", () => {
     const records = {
       "25": [
         {
@@ -68,7 +68,7 @@ describe("#filterRecords()", () => {
         }
       ]
     };
-    const transaction = { "--empId": "26", "--date": "2019-11-26"};
+    const transaction = { "--empId": "26", "--date": "2019-11-26" };
     const actual = filterRecords(records, transaction);
     const expected = [
       {
@@ -84,7 +84,7 @@ describe("#filterRecords()", () => {
     ];
     assert.deepStrictEqual(actual, expected);
   });
-  it("should filter records if a particular date is given", () => {
+  it("should filter records when a particular date is given", () => {
     const records = {
       "25": [
         {
@@ -116,7 +116,14 @@ describe("#filterRecords()", () => {
     const expected = { error: "Invalid Options" };
     assert.deepStrictEqual(actual, expected);
   });
-  it("should filter records if no options are given", () => {
+  it("should give error message when user doesn't exists", () => {
+    const records = {};
+    const transaction = { "--empId": "12334", "--date": "2019-11-26" };
+    const actual = filterRecords(records, transaction);
+    const expected = { error: "Employee doesn't exists" };
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should error message when no options are given", () => {
     const records = {
       "25": [
         {
@@ -151,8 +158,8 @@ describe("#filterRecords()", () => {
 });
 
 describe("#query()", () => {
-  it("should return error if employee doesn't exists", () => {
-    const transaction = {"--empId": ""};
+  it("should return error when employee option is not given", () => {
+    const transaction = { "--empId": "" };
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
@@ -167,7 +174,7 @@ describe("#query()", () => {
     };
     assert.deepStrictEqual(actual, expected);
   });
-  it("should return error if employee doesn't exists", () => {
+  it("should return error when employee id doesn't exists", () => {
     const transaction = {
       "--empId": 11111
     };
@@ -181,7 +188,7 @@ describe("#query()", () => {
     const date = new Date();
     const actual = query(transaction, date, readFile);
     const expected = {
-      error: "User doesn't exists"
+      error: "Employee doesn't exists"
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -207,6 +214,22 @@ describe("#query()", () => {
         }
       ],
       "--empId": 21
+    };
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should return error when given Options are invalid", () => {
+    const transaction = { error: "Invalid Options" };
+    const readFile = function(filename, encoding) {
+      assert.equal(filename, "./beverageRecords.json");
+      assert.equal(encoding, "utf8");
+      const contents =
+        '{"21":[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z"}]}';
+      return contents;
+    };
+    const date = new Date();
+    const actual = query(transaction, date, readFile);
+    const expected = {
+      error: "Invalid Options"
     };
     assert.deepStrictEqual(actual, expected);
   });

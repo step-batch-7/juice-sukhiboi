@@ -26,7 +26,7 @@ const updateRecord = function(record, filename, readFile, writeFile) {
 };
 
 const saveRecord = function(transaction, date, readFile, writeFile) {
-  if(transaction.error != undefined) return transaction
+  if (transaction.error != undefined) return transaction;
   const filename = "./beverageRecords.json";
   const record = createTransactionRecord(transaction, date);
   const latestRecord = updateRecord(record, filename, readFile, writeFile);

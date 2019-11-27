@@ -44,6 +44,40 @@ describe("#saveRecord()", () => {
 
     assert.deepStrictEqual(actual, expected);
   });
+  it("should return error when transaction has error", () => {
+    const transaction = {
+      error: "Invalid Options"
+    };
+
+    const date = new Date();
+
+    const readFile = function(filename, encoding) {
+      assert.equal(filename, "./beverageRecords.json");
+      assert.equal(encoding, "utf8");
+      const contents =
+        '{"11111p":[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z"}]}';
+      return contents;
+    };
+
+    const writeFile = function(filename, record) {
+      const expectedFilename = "./beverageRecords.json";
+      const expectedRecord =
+        '{"11111p":[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z"},{"--beverage":"Orange","--qty":"2","--date":"' +
+        date.toJSON() +
+        '"}]}';
+      assert.equal(filename, expectedFilename);
+      assert.equal(record, expectedRecord);
+      return true;
+    };
+
+    const actual = saveRecord(transaction, date, readFile, writeFile);
+
+    const expected = {
+      error: "Invalid Options"
+    };
+
+    assert.deepStrictEqual(actual, expected);
+  });
 });
 
 describe("#updateRecord()", () => {
@@ -87,7 +121,7 @@ describe("#updateRecord()", () => {
 
 describe("#updateTransactions()", () => {
   const date = new Date();
-  it("should update the transaction with the given transaction if employee doesn't exists", () => {
+  it("should update the transactions with the given transaction when employee doesn't exists", () => {
     const contents =
       '{"21":[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T11:09:06.504Z"},{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T12:56:55.886Z"}]}';
     const record = {
@@ -101,7 +135,7 @@ describe("#updateTransactions()", () => {
       '"}]}';
     assert.deepStrictEqual(actual, expected);
   });
-  it("should update the transaction with the given transaction if employee exists", () => {
+  it("should update the transactions with the given transaction when employee exists", () => {
     const contents =
       '{"21":[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T11:09:06.504Z"},{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T12:56:55.886Z"}]}';
     const record = {

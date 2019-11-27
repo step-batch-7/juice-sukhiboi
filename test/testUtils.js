@@ -8,7 +8,6 @@ const getOperationResult = utils.getOperationResult;
 const errorMessage = utils.errorMessage;
 const queryRecordResult = utils.queryRecordResult;
 const saveRecordResult = utils.saveRecordResult;
-const validateTransaction = utils.validateTransaction;
 
 const saveRecord = require("./../src/saveRecord").saveRecord;
 const query = require("./../src/query").query;
@@ -23,7 +22,7 @@ describe("#formatArgs()", () => {
 });
 
 describe("#getOperation()", function() {
-  it("should return the saveRecord function if --save given", function() {
+  it("should return the saveRecord function when save command is given", function() {
     const userArgs = "--save --beverage Orange --empId 11111 --qty 1".split(
       " "
     );
@@ -31,13 +30,13 @@ describe("#getOperation()", function() {
     const expected = saveRecord;
     assert.deepStrictEqual(actual, expected);
   });
-  it("should return the query function if --query given", function() {
+  it("should return the query function when query command given", function() {
     const userArgs = "--query --empId 11111".split(" ");
     const actual = getOperation(userArgs);
     const expected = query;
     assert.deepStrictEqual(actual, expected);
   });
-  it("should return errorMessage if wrong command is given", () => {
+  it("should return error message when wrong command is given", () => {
     const args = "--command --empId 12345";
     const actual = getOperation(args);
     const expected = utils.errorMessage;
@@ -46,7 +45,7 @@ describe("#getOperation()", function() {
 });
 
 describe("#parseTransaction()", function() {
-  it("should return an object with all the required transaction details if --save is given", function() {
+  it("should return all the required transaction details when save command is given", function() {
     const userArgs = "--save --beverage Orange --empId 11111 --qty 1".split(
       " "
     );
@@ -58,7 +57,7 @@ describe("#parseTransaction()", function() {
     };
     assert.deepStrictEqual(actual, expected);
   });
-  it("should return an object with empId if --query is given", function() {
+  it("should return empId when query command is given with employee id", function() {
     const userArgs = "--query --empId 11111".split(" ");
     const actual = parseTransaction(userArgs);
     const expected = {
@@ -66,7 +65,7 @@ describe("#parseTransaction()", function() {
     };
     assert.deepStrictEqual(actual, expected);
   });
-  it("should return an object with empId and date if --query and --date is given", function() {
+  it("should return empId and date when query command is given with date and employee id", function() {
     const userArgs = "--query --empId 11111 --date 2019-11-12".split(" ");
     const actual = parseTransaction(userArgs);
     const expected = {
@@ -75,7 +74,7 @@ describe("#parseTransaction()", function() {
     };
     assert.deepStrictEqual(actual, expected);
   });
-  it("should return an object with date if --date is given", function() {
+  it("should return date when query command is given with date", function() {
     const userArgs = "--query --date 2019-11-12".split(" ");
     const actual = parseTransaction(userArgs);
     const expected = {
@@ -84,7 +83,15 @@ describe("#parseTransaction()", function() {
     };
     assert.deepStrictEqual(actual, expected);
   });
-  it("should return error if wrong command is given", () => {
+  it("should return error when user options are invalid", () => {
+    const args = "--query --empId 12345q".split(" ");
+    const actual = parseTransaction(args);
+    const expected = {
+      error: "Invalid Options"
+    };
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should return error when wrong command is given", () => {
     const args = "--command --empId 12345";
     const actual = parseTransaction(args);
     const expected = {
@@ -108,7 +115,7 @@ describe("#getOperationResult()", () => {
       date.toJSON();
     assert.deepStrictEqual(actual, expected);
   });
-  it("should return error if error Object is given as argument", () => {
+  it("should return error when error is given as an argument", () => {
     const errorObject = {
       error: "Invalid Command"
     };
@@ -166,98 +173,6 @@ describe("#errorMessage()", () => {
     };
     const actual = errorMessage(error);
     const expected = error;
-    assert.deepStrictEqual(actual, expected);
-  });
-});
-
-describe("#validateTransaction()", () => {
-  it("should validate the options given by user for --save command if options are correct", () => {
-    const transaction = {
-      "--beverage": "Orange",
-      "--empId": "11111",
-      "--qty": "1"
-    }
-    const actual = validateTransaction(transaction);
-    const expected = {
-      "--beverage": "Orange",
-      "--empId": "11111",
-      "--qty": "1"
-    };
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should validate the options given by user for --save command if options are incorrect", () => {
-    const transaction = {
-      "--beverage": "Orange",
-      "--empId": "11111q",
-      "--qty": "1"
-    };
-    const actual = validateTransaction(transaction);
-    const expected = {
-      "error": "Invalid Options",
-    };
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should validate the options given by user for --query command if options are correct and --empId is given", () => {
-    const transaction = {
-      "--empId": "11111",
-    };
-    const actual = validateTransaction(transaction);
-    const expected = {
-      "--empId": "11111"
-    };
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should validate the options given by user for --query command if options are correct and --date is given", () => {
-    const transaction = {
-      "--date": "2019-11-12"
-    };
-    const actual = validateTransaction(transaction);
-    const expected = {
-      "--date": "2019-11-12"
-    };
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should validate the options given by user for --query command if options are correct and --empId and --date is given", () => {
-    const transaction = {
-      "--empId": "11111",
-      "--date": "2019-11-12"
-    };
-    const actual = validateTransaction(transaction);
-    const expected = {
-      "--empId": "11111",
-      "--date": "2019-11-12"
-    };
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should validate the options given by user for --query command if options are incorrect and --empId is given", () => {
-    const transaction = {
-      "--empId": "11111q",
-    };
-    const actual = validateTransaction(transaction);
-    const expected = {
-      "error": "Invalid Options"
-    };
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should validate the options given by user for --query command if options are incorrect and --date is given", () => {
-    const transaction = {
-      "--date": "2019-12-"
-    };
-    const actual = validateTransaction(transaction);
-    const expected = {
-      error: "Invalid Options"
-    };
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should validate the options given by user for --query command if options are incorrect and --empId and --date is given", () => {
-    const transaction = {
-      "--error": "11111",
-      "--date": "2019-12-"
-    };
-    const actual = validateTransaction(transaction);
-    const expected = {
-      error: "Invalid Options"
-    };
     assert.deepStrictEqual(actual, expected);
   });
 });
