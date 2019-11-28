@@ -193,13 +193,13 @@ describe("#saveRecordResult()", () => {
 describe("#queryRecordResult()", () => {
   const date = new Date();
   it("should return result of a query command", () => {
-    const operationResult = {
+    const operationResult = [{
       transactionRecords: [
         { "--beverage": "Orange", "--qty": "1", "--date": date.toJSON() },
         { "--beverage": "Orange", "--qty": "1", "--date": date.toJSON() }
       ],
       "--empId": 21
-    };
+    }];
     const actual = queryRecordResult(operationResult);
     const expected =
       "\n" +

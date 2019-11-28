@@ -2,7 +2,7 @@ const saveRecord = require("./saveRecord").saveRecord;
 const query = require("./query").query;
 const validateTransaction = require("./validateTransaction")
   .validateTransaction;
-const chalk = require('chalk');
+const chalk = require("chalk");
 
 const formatArgs = function(args) {
   const userArgs = args.slice(2);
@@ -81,17 +81,24 @@ const saveRecordResult = function(operationResult) {
 
 const queryRecordResult = function(operationResult) {
   const headings = "\nEmployeeId, Beverage, Quantity, Date\n";
-  const records = operationResult.transactionRecords.map(record => {
-    recordDetails = `${operationResult["--empId"]}, ${record["--beverage"]}, ${record["--qty"]}, ${record["--date"]}`;
-    return recordDetails;
-  });
-  const totalBeverages = operationResult.transactionRecords.reduce(
-    (context, record) => {
-      context = context + +record["--qty"];
+  const records = operationResult.reduce(function(context, userData) {
+    const userRecords = userData.transactionRecords.reduce(function(
+      context,
+      record
+    ) {
+      recordDetails = `${userData["--empId"]}, ${record["--beverage"]}, ${record["--qty"]}, ${record["--date"]}`;
+      context.push(recordDetails);
       return context;
     },
-    0
-  );
+    []);
+    return context.concat(userRecords);
+  }, []);
+
+  const totalBeverages = records.reduce((context, record) => {
+    context = context + +record.split(",")[2];
+    return context;
+  }, 0);
+
   const result = `${headings}${records.join(
     "\n"
   )}\n\nTotal: ${totalBeverages} Juices`;
@@ -99,7 +106,8 @@ const queryRecordResult = function(operationResult) {
 };
 
 const getOperationResult = function(operationResult, userArgs) {
-  if (operationResult.error != undefined) return chalk.bold.red(`\n${operationResult.error}`);
+  if (operationResult.error != undefined)
+    return chalk.bold.red(`\n${operationResult.error}`);
   const results = {
     "--save": saveRecordResult,
     "--query": queryRecordResult

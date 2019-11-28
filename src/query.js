@@ -17,14 +17,26 @@ const filterWithDate = function(date, records) {
 
 const filterWithEmpId = function(empId, records) {
   const userRecords = records[empId];
-  return getFilteredRecords(userRecords);
+  if (userRecords == undefined) return { error: "Employee doesn't exists" };
+  const userData = [
+    {
+      transactionRecords: userRecords,
+      "--empId": empId
+    }
+  ];
+  return userData;
 };
 
 const filterWithEmpIdAndDate = function(empId, date, records) {
   const givenDate = date.split("T")[0];
   const userRecords = records[empId];
   if (userRecords == undefined) return { error: "Employee doesn't exists" };
-  const filteredRecord = filterWithDate(givenDate, userRecords);
+  const filteredRecord = [
+    {
+      transactionRecords: filterWithDate(givenDate, userRecords),
+      "--empId": empId
+    }
+  ];
   return filteredRecord;
 };
 
@@ -40,6 +52,18 @@ const filterRecords = function(records, transactions) {
     return filterWithEmpId(empId, records);
   }
 
+  if (date != undefined) {
+    const empIds = Object.keys(records);
+    const filteredRecords = empIds.map(function(id) {
+      const userData = {
+        transactionRecords: filterWithDate(date, records[id]),
+        "--empId": id
+      };
+      return userData;
+    });
+    if (filteredRecords.length == 0) return { error: "No records found" };
+    return filteredRecords;
+  }
   const filteredRecord = { error: "Invalid Options" };
   return filteredRecord;
 };
@@ -52,18 +76,11 @@ const getRecords = function(filename, readFile) {
 
 const query = function(transaction, date, readFile) {
   if (transaction.error != undefined) return transaction;
-
   const filename = "./beverageRecords.json";
   const records = getRecords(filename, readFile);
   const userTransactions = filterRecords(records, transaction);
-
   if (userTransactions.error != undefined) return userTransactions;
-  const userData = {
-    transactionRecords: userTransactions,
-    "--empId": transaction["--empId"]
-  };
-
-  return userData;
+  return userTransactions;
 };
 
 exports.getFilteredRecords = getFilteredRecords;
