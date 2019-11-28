@@ -57,6 +57,7 @@ describe("#getTransactionPrototype()", () => {
   });
   it("should return query transaction prototype wrong query command is given", () => {
     const expected = {
+      "--beverage": undefined,
       "--empId": undefined,
       "--date": undefined
     };
@@ -108,7 +109,8 @@ describe("#parseTransaction()", function() {
     const actual = parseTransaction(userArgs);
     const expected = {
       "--empId": "11111",
-      "--date": undefined
+      "--date": undefined,
+      "--beverage": undefined
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -117,7 +119,8 @@ describe("#parseTransaction()", function() {
     const actual = parseTransaction(userArgs);
     const expected = {
       "--empId": "11111",
-      "--date": "2019-11-12"
+      "--date": "2019-11-12",
+      "--beverage": undefined
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -126,7 +129,8 @@ describe("#parseTransaction()", function() {
     const actual = parseTransaction(userArgs);
     const expected = {
       "--date": "2019-11-12",
-      "--empId": undefined
+      "--empId": undefined,
+      "--beverage": undefined
     };
     assert.deepStrictEqual(actual, expected);
   });

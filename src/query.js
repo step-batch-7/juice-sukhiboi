@@ -5,6 +5,16 @@ const getFilteredRecords = function(filterRecords) {
   return filterRecords;
 };
 
+const filterWithBeverage = function(beverage, records) {
+  const userRecords = records.filter(record => {
+    const recordBeverage = record["--beverage"];
+    if (recordBeverage == beverage) {
+      return record;
+    }
+  });
+  return getFilteredRecords(userRecords);
+};
+
 const filterWithDate = function(date, records) {
   const userRecords = records.filter(record => {
     const recordDate = record["--date"].split("T")[0];
@@ -41,18 +51,49 @@ const filterWithEmpIdAndDate = function(empId, date, records) {
 };
 
 const filterRecords = function(records, transactions) {
+  const beverage = transactions["--beverage"];
   const empId = transactions["--empId"];
   const date = transactions["--date"];
 
-  if (empId != undefined && date != undefined) {
+  const validBeverage = beverage != undefined;
+  const validEmpId = empId != undefined;
+  const validDate = date != undefined;
+
+  if (validBeverage && validEmpId && validDate) {
+    const filteredRecords = filterWithEmpIdAndDate(empId, date, records);
+    const record = filteredRecords[0].transactionRecords;
+    const finalRecords = [
+      {
+        transactionRecords: filterWithBeverage(beverage, record),
+        "--empId": empId
+      }
+    ];
+    return finalRecords;
+  }
+
+  if (validEmpId && validDate) {
     return filterWithEmpIdAndDate(empId, date, records);
   }
 
-  if (empId != undefined) {
+  if (validBeverage) {
+    const empIds = Object.keys(records);
+    const filteredRecords = empIds.map(function(id) {
+      const userData = {
+        transactionRecords: filterWithBeverage(beverage, records[id]),
+        "--empId": id
+      };
+      return userData;
+    });
+
+    if (filteredRecords.length == 0) return { error: "No records found" };
+    return filteredRecords;
+  }
+
+  if (validEmpId) {
     return filterWithEmpId(empId, records);
   }
 
-  if (date != undefined) {
+  if (validDate) {
     const empIds = Object.keys(records);
     const filteredRecords = empIds.map(function(id) {
       const userData = {
@@ -61,9 +102,11 @@ const filterRecords = function(records, transactions) {
       };
       return userData;
     });
+
     if (filteredRecords.length == 0) return { error: "No records found" };
     return filteredRecords;
-  }
+  } 
+
   const filteredRecord = { error: "Invalid Options" };
   return filteredRecord;
 };
@@ -87,6 +130,7 @@ exports.getFilteredRecords = getFilteredRecords;
 exports.filterWithDate = filterWithDate;
 exports.filterWithEmpId = filterWithEmpId;
 exports.filterWithEmpIdAndDate = filterWithEmpIdAndDate;
+exports.filterWithBeverage = filterWithBeverage;
 exports.filterRecords = filterRecords;
 exports.getRecords = getRecords;
 exports.query = query;

@@ -4,6 +4,7 @@ const queryFile = require("./../src/query");
 const getFilteredRecords = queryFile.getFilteredRecords;
 const filterWithDate = queryFile.filterWithDate;
 const filterWithEmpId = queryFile.filterWithEmpId;
+const filterWithBeverage = queryFile.filterWithBeverage;
 const filterWithEmpIdAndDate = queryFile.filterWithEmpIdAndDate;
 const filterRecords = queryFile.filterRecords;
 const getRecords = queryFile.getRecords;
@@ -38,8 +39,35 @@ describe("#getFilteredRecords()", () => {
   });
 });
 
+describe("#filterWithBeverage()", () => {
+  it("should give all the records of a parcular beverage", () => {
+    const beverage = "Banana";
+    const records = [
+      {
+        "--beverage": "Banana",
+        "--qty": "2",
+        "--date": "2019-11-28T19:34:42.970Z"
+      },
+      {
+        "--beverage": "Orange",
+        "--qty": "2",
+        "--date": "2019-11-27T19:34:42.970Z"
+      }
+    ];
+    const actual = filterWithBeverage(beverage, records);
+    const expected = [
+      {
+        "--beverage": "Banana",
+        "--date": "2019-11-28T19:34:42.970Z",
+        "--qty": "2"
+      }
+    ];
+    assert.deepStrictEqual(actual, expected);
+  });
+});
+
 describe("#filterWithDate()", () => {
-  it("should give all the records of a particular date based on records", () => {
+  it("should give all the records of a particular date", () => {
     const date = "2019-11-28";
     const records = [
       {

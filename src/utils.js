@@ -33,6 +33,7 @@ const getTransactionPrototype = function(operation) {
       "--qty": undefined
     },
     "--query": {
+      "--beverage": undefined,
       "--empId": undefined,
       "--date": undefined
     }
