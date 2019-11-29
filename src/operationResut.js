@@ -4,37 +4,25 @@ const saveRecordResult = function(operationResult) {
   const successMessage = "\nTransaction Recorded: \n";
   const headings = "EmployeeId, Beverage, Quantity, Date\n";
   const transactionData = `${operationResult["--empId"]}, ${
-    operationResult.transaction["--beverage"]
-  }, ${operationResult.transaction["--qty"]}, ${operationResult.transaction[
-    "--date"
-  ].toJSON()}`;
+    operationResult["--beverage"]
+  }, ${operationResult["--qty"]}, ${operationResult["--date"].toJSON()}`;
   const result = successMessage + headings + transactionData;
   return result;
 };
 
 const queryRecordResult = function(operationResult) {
   const headings = "\nEmployeeId, Beverage, Quantity, Date\n";
-  const records = operationResult.reduce(function(context, userData) {
-    const userRecords = userData.transactionRecords.reduce(function(
-      context,
-      record
-    ) {
-      recordDetails = `${userData["--empId"]}, ${record["--beverage"]}, ${record["--qty"]}, ${record["--date"]}`;
-      context.push(recordDetails);
-      return context;
-    },
-    []);
-    return context.concat(userRecords);
-  }, []);
-
-  const totalBeverages = records.reduce((context, record) => {
-    context = context + +record.split(",")[2];
+  const transactions = operationResult.map(record => {
+    const row = `${record["--empId"]},${record["--beverage"]},${record["--qty"]},${record["--date"]}`;
+    return row;
+  });
+  const totalBeverages = operationResult.reduce((context, record) => {
+    context = context + +record["--qty"];
     return context;
   }, 0);
-
-  const result = `${headings}${records.join(
-    "\n"
-  )}\n\nTotal: ${totalBeverages} Juices`;
+  let footer = `\n\nTotal: ${totalBeverages} Juices`;
+  if(totalBeverages < 2) footer = `\n\nTotal: ${totalBeverages} Juice`;
+  const result = headings + transactions.join("\n") + footer;
   return result;
 };
 

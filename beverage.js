@@ -1,6 +1,6 @@
 const fs = require("fs");
 const utils = require("./src/utils");
-const operationResult = require('./src/operationResut');
+const getOperationResult = require("./src/operationResut").getOperationResult;
 
 const main = function(args) {
   const userArgs = utils.formatArgs(args);
@@ -13,7 +13,7 @@ const main = function(args) {
     fs.readFileSync,
     fs.writeFileSync
   );
-  const result = operationResult.getOperationResult(processedResult, userArgs);
+  const result = getOperationResult(processedResult, userArgs);
   console.log(result);
 };
 

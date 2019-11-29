@@ -1,7 +1,7 @@
-const assert = require('assert');
-const chalk = require('chalk');
+const assert = require("assert");
+const chalk = require("chalk");
 
-const operationResult = require('./../src/operationResut');
+const operationResult = require("./../src/operationResut");
 const getOperationResult = operationResult.getOperationResult;
 const queryRecordResult = operationResult.queryRecordResult;
 const saveRecordResult = operationResult.saveRecordResult;
@@ -11,7 +11,9 @@ describe("#getOperationResult()", () => {
     const date = new Date();
     const args = "--save --beverage Orange --empId 21 --qty 5".split(" ");
     const transactionResult = {
-      transaction: { "--beverage": "Orange", "--qty": "5", "--date": date },
+      "--beverage": "Orange",
+      "--qty": "5",
+      "--date": date,
       "--empId": "21"
     };
     const actual = getOperationResult(transactionResult, args);
@@ -34,7 +36,9 @@ describe("#saveRecordResult()", () => {
   const date = new Date();
   it("should return result of a save command", () => {
     const operationResult = {
-      transaction: { "--beverage": "Orange", "--qty": "1", "--date": date },
+      "--beverage": "Orange",
+      "--qty": "1",
+      "--date": date,
       "--empId": 21
     };
     const actual = saveRecordResult(operationResult);
@@ -47,24 +51,29 @@ describe("#saveRecordResult()", () => {
 
 describe("#queryRecordResult()", () => {
   const date = new Date();
-  it("should return result of a query command", () => {
+  it("should give result of a query command", () => {
     const operationResult = [
       {
-        transactionRecords: [
-          { "--beverage": "Orange", "--qty": "1", "--date": date.toJSON() },
-          { "--beverage": "Orange", "--qty": "1", "--date": date.toJSON() }
-        ],
-        "--empId": 21
+        "--beverage": "Orange",
+        "--qty": "1",
+        "--date": date.toJSON(),
+        "--empId": "21"
+      },
+      {
+        "--beverage": "Orange",
+        "--qty": "1",
+        "--date": date.toJSON(),
+        "--empId": "21"
       }
     ];
     const actual = queryRecordResult(operationResult);
     const expected =
       "\n" +
       "EmployeeId, Beverage, Quantity, Date\n" +
-      "21, Orange, 1, " +
+      "21,Orange,1," +
       date.toJSON() +
       "\n" +
-      "21, Orange, 1, " +
+      "21,Orange,1," +
       date.toJSON() +
       "\n" +
       "\n" +

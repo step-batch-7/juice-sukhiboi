@@ -1,10 +1,8 @@
 const createTransactionRecord = function(transaction, date) {
   const record = {
-    transaction: {
-      "--beverage": transaction["--beverage"],
-      "--qty": transaction["--qty"],
-      "--date": date
-    },
+    "--beverage": transaction["--beverage"],
+    "--qty": transaction["--qty"],
+    "--date": date,
     "--empId": transaction["--empId"]
   };
   return record;
@@ -12,11 +10,7 @@ const createTransactionRecord = function(transaction, date) {
 
 const updateTransactions = function(content, record) {
   let records = JSON.parse(content);
-  const latestRecord = record["--empId"];
-  if (records[latestRecord] == undefined) {
-    records[latestRecord] = [];
-  }
-  records[latestRecord].push(record.transaction);
+  records.push(record);
   const updatedRecords = JSON.stringify(records);
   return updatedRecords;
 };
