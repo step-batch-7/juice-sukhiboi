@@ -178,7 +178,12 @@ describe("#query()", () => {
       return contents;
     };
     const date = new Date();
-    const actual = query(transaction, date, readFile);
+    const config = {
+      date: date,
+      readFile: readFile,
+      writeFile: undefined
+    };   
+    const actual = query(transaction, config);
     const expected = [];
     assert.deepStrictEqual(actual, expected);
   });
@@ -194,7 +199,12 @@ describe("#query()", () => {
       return contents;
     };
     const date = new Date();
-    const actual = query(transaction, date, readFile);
+    const config = {
+      date: date,
+      readFile: readFile,
+      writeFile: undefined
+    };   
+    const actual = query(transaction, config);
     const expected = [];
     assert.deepStrictEqual(actual, expected);
   });
@@ -210,7 +220,12 @@ describe("#query()", () => {
       return contents;
     };
     const date = new Date();
-    const actual = query(transaction, date, readFile);
+    const config = {
+      date: date,
+      readFile: readFile,
+      writeFile: "writeFile"
+    };
+    const actual = query(transaction, config);
     const expected = [
       {
         "--beverage": "Orange",

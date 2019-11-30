@@ -16,17 +16,27 @@ const updateTransactions = function(content, record) {
 };
 
 const updateRecord = function(record, filename, readFile, writeFile) {
-  const contents = readFile(filename, "utf8");
+  let contents;
+  try {
+    contents = readFile(filename, "utf8");
+  } catch (e) {
+    contents =  '[]';
+  }
   const recordData = updateTransactions(contents, record);
   writeFile(filename, recordData);
   return record;
 };
 
-const saveRecord = function(transaction, date, readFile, writeFile) {
+const saveRecord = function(transaction, config) {
   if (transaction.error != undefined) return transaction;
   const filename = "./beverageRecords.json";
-  const record = createTransactionRecord(transaction, date);
-  const latestRecord = updateRecord(record, filename, readFile, writeFile);
+  const record = createTransactionRecord(transaction, config.date);
+  const latestRecord = updateRecord(
+    record,
+    filename,
+    config.readFile,
+    config.writeFile
+  );
   return latestRecord;
 };
 

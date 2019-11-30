@@ -41,10 +41,10 @@ const getRecords = function(filename, readFile) {
   return recordsAsJSON;
 };
 
-const query = function(transaction, date, readFile) {
+const query = function(transaction, config) {
   if (transaction.error != undefined) return transaction;
   const filename = "./beverageRecords.json";
-  const records = getRecords(filename, readFile);
+  const records = getRecords(filename, config.readFile);
   const userTransactions = filterRecords(records, transaction);
   if (userTransactions.error != undefined) return userTransactions;
   return userTransactions;

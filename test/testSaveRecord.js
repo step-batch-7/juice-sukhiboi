@@ -35,7 +35,13 @@ describe("#saveRecord()", () => {
       return true;
     };
 
-    const actual = saveRecord(transaction, date, readFile, writeFile);
+    const config = {
+      date: date,
+      readFile: readFile,
+      writeFile: writeFile
+    }
+
+    const actual = saveRecord(transaction, config);
 
     const expected = {
       "--beverage": "Orange",

@@ -8,6 +8,7 @@ const getTransactionPrototype = utils.getTransactionPrototype;
 const updateTransactionDetails = utils.updateTransactionDetails;
 const parseTransaction = utils.parseTransaction;
 const errorMessage = utils.errorMessage;
+const executeTransaction = utils.executeTransaction;
 
 const saveRecord = require("./../src/saveRecord").saveRecord;
 const query = require("./../src/query").query;
@@ -53,7 +54,7 @@ describe("#getTransactionPrototype()", () => {
     };
     const operation = "--save";
     const actual = getTransactionPrototype(operation);
-    assert.deepStrictEqual(actual, expected)
+    assert.deepStrictEqual(actual, expected);
   });
   it("should return query transaction prototype wrong query command is given", () => {
     const expected = {
@@ -159,6 +160,72 @@ describe("#errorMessage()", () => {
     };
     const actual = errorMessage(error);
     const expected = error;
+    assert.deepStrictEqual(actual, expected);
+  });
+});
+
+describe("#executeTransaction()", () => {
+  it("should execute save command on given args with given configs ", () => {
+    const args = "node beverage.js --save --beverage Orange --empId 11111 --qty 2".split(" ");
+
+    const readFile = function(filename, encoding) {
+      assert.equal(filename, "./beverageRecords.json");
+      assert.equal(encoding, "utf8");
+      const contents =
+        '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"}]';
+      return contents;
+    };
+
+    const date = new Date();
+
+    const writeFile = function(filename, record) {
+      const expectedFilename = "./beverageRecords.json";
+      const expectedRecord =
+        '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"},{"--beverage":"Orange","--qty":"2","--date":"' +
+        date.toJSON() +
+        '","--empId":"11111"}]';
+      assert.equal(filename, expectedFilename);
+      assert.equal(record, expectedRecord);
+      return true;
+    };
+
+    const config = {
+      date: date,
+      readFile: readFile,
+      writeFile: writeFile
+    };
+
+    const actual = executeTransaction(args, config);
+    const expected = '\nTransaction Recorded: \nEmployeeId, Beverage, Quantity, Date\n11111, Orange, 2, ' + config.date.toJSON()
+
+    assert.deepStrictEqual(actual, expected);
+
+  });
+  it("should execute query command on given args with given configs ", () => {
+    const args = "node beverage.js --query --empId 11111".split(
+      " "
+    );
+
+    const readFile = function(filename, encoding) {
+      assert.equal(filename, "./beverageRecords.json");
+      assert.equal(encoding, "utf8");
+      const contents =
+        '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"}]';
+      return contents;
+    };
+
+    const date = new Date();
+
+    const config = {
+      date: date,
+      readFile: readFile,
+      writeFile: undefined
+    };
+
+    const actual = executeTransaction(args, config);
+    const expected =
+      "\nEmployeeId, Beverage, Quantity, Date\n11111,Orange,5,2019-11-25T06:16:09.419Z\n\nTotal: 5 Juices";
+
     assert.deepStrictEqual(actual, expected);
   });
 });

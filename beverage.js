@@ -1,20 +1,14 @@
-const fs = require("fs");
-const utils = require("./src/utils");
-const getOperationResult = require("./src/operationResut").getOperationResult;
+const executeTransaction = require("./src/utils").executeTransaction; 
+const fs = require('fs');
 
 const main = function(args) {
-  const userArgs = utils.formatArgs(args);
-  const date = new Date();
-  const operation = utils.getOperation(userArgs);
-  const transaction = utils.parseTransaction(userArgs);
-  const processedResult = operation(
-    transaction,
-    date,
-    fs.readFileSync,
-    fs.writeFileSync
-  );
-  const result = getOperationResult(processedResult, userArgs);
-  console.log(result);
+   const config = {
+     date: new Date(),
+     readFile: fs.readFileSync,
+     writeFile: fs.writeFileSync
+   }
+   const result = executeTransaction(args, config);
+   console.log(result);
 };
 
 main(process.argv);

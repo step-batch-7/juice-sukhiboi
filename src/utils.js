@@ -2,6 +2,7 @@ const saveRecord = require("./saveRecord").saveRecord;
 const query = require("./query").query;
 const validateTransaction = require("./validateTransaction")
   .validateTransaction;
+  const getOperationResult = require('./operationResut').getOperationResult;
 
 const formatArgs = function(args) {
   const userArgs = args.slice(2);
@@ -67,6 +68,15 @@ const parseTransaction = function(args) {
   return { error: "Invalid Options" };
 };
 
+const executeTransaction = function(args, config) {
+  const userArgs = formatArgs(args);
+  const operation = getOperation(userArgs);
+  const transaction = parseTransaction(userArgs);
+  const result = operation(transaction, config);
+  const message = getOperationResult(result, userArgs);
+  return message;
+};
+
 exports.formatArgs = formatArgs;
 exports.getOperation = getOperation;
 exports.getTransactionPrototype = getTransactionPrototype;
@@ -74,3 +84,4 @@ exports.updateTransactionDetails = updateTransactionDetails;
 exports.parseTransaction = parseTransaction;
 exports.errorMessage = errorMessage;
 exports.validateTransaction = validateTransaction;
+exports.executeTransaction = executeTransaction;
