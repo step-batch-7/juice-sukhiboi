@@ -20,7 +20,7 @@ const updateRecord = function(record, filename, readFile, writeFile) {
   try {
     contents = readFile(filename, "utf8");
   } catch (e) {
-    contents =  '[]';
+    contents = "[]";
   }
   const recordData = updateTransactions(contents, record);
   writeFile(filename, recordData);
@@ -40,7 +40,9 @@ const saveRecord = function(transaction, config) {
   return latestRecord;
 };
 
-exports.saveRecord = saveRecord;
-exports.updateRecord = updateRecord;
-exports.updateTransactions = updateTransactions;
-exports.createTransactionRecord = createTransactionRecord;
+module.exports = {
+  saveRecord,
+  updateRecord,
+  updateTransactions,
+  createTransactionRecord
+};

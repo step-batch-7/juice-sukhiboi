@@ -50,6 +50,8 @@ const query = function(transaction, config) {
   return userTransactions;
 };
 
-exports.filterRecords = filterRecords;
-exports.getRecords = getRecords;
-exports.query = query;
+module.exports = {
+  filterRecords,
+  getRecords,
+  query
+};

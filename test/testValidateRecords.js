@@ -1,10 +1,12 @@
 const assert = require("assert");
-const validateTransaction = require("./../src/validateTransaction")
-  .validateTransaction;
-const isValidBeverage = require("./../src/validateTransaction").isValidBeverage;
-const isValidQty = require("./../src/validateTransaction").isValidQty;
-const isValidDate = require("./../src/validateTransaction").isValidDate;
-const isValidEmpId = require("./../src/validateTransaction").isValidEmpId;
+
+const {
+  validateTransaction,
+  isValidBeverage,
+  isValidQty,
+  isValidDate,
+  isValidEmpId
+} = require("./../src/validateTransaction");;
 
 describe("#isValidBeverage()", () => {
   it("should validate beverage", () => {

@@ -1,9 +1,6 @@
 const assert = require("assert");
-const queryFile = require("./../src/query");
 
-const filterRecords = queryFile.filterRecords;
-const getRecords = queryFile.getRecords;
-const query = queryFile.query;
+const { filterRecords, getRecords, query } = require("./../src/query");
 
 describe("#filterRecords()", () => {
   it("should filter records when only employee id is given", () => {

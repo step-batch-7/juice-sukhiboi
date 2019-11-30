@@ -21,7 +21,7 @@ const queryRecordResult = function(operationResult) {
     return context;
   }, 0);
   let footer = `\n\nTotal: ${totalBeverages} Juices`;
-  if(totalBeverages < 2) footer = `\n\nTotal: ${totalBeverages} Juice`;
+  if (totalBeverages < 2) footer = `\n\nTotal: ${totalBeverages} Juice`;
   const result = headings + transactions.join("\n") + footer;
   return result;
 };
@@ -39,6 +39,8 @@ const getOperationResult = function(operationResult, userArgs) {
   return result;
 };
 
-exports.getOperationResult = getOperationResult;
-exports.saveRecordResult = saveRecordResult;
-exports.queryRecordResult = queryRecordResult;
+module.exports = {
+  getOperationResult,
+  saveRecordResult,
+  queryRecordResult
+};

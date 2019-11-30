@@ -1,10 +1,11 @@
 const assert = require("assert");
-const saveRecordFile = require("./../src/saveRecord");
 
-const saveRecord = saveRecordFile.saveRecord;
-const updateRecord = saveRecordFile.updateRecord;
-const updateTransactions = saveRecordFile.updateTransactions;
-const createTransactionRecord = saveRecordFile.createTransactionRecord;
+const {
+  saveRecord,
+  updateRecord,
+  updateTransactions,
+  createTransactionRecord
+} = require("./../src/saveRecord");
 
 describe("#saveRecord()", () => {
   it("should return the given transaction object", () => {
@@ -39,7 +40,7 @@ describe("#saveRecord()", () => {
       date: date,
       readFile: readFile,
       writeFile: writeFile
-    }
+    };
 
     const actual = saveRecord(transaction, config);
 

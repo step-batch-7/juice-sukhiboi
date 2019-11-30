@@ -1,10 +1,10 @@
 const assert = require("assert");
 const chalk = require("chalk");
-
-const operationResult = require("./../src/operationResut");
-const getOperationResult = operationResult.getOperationResult;
-const queryRecordResult = operationResult.queryRecordResult;
-const saveRecordResult = operationResult.saveRecordResult;
+const {
+  getOperationResult,
+  queryRecordResult,
+  saveRecordResult
+} = require("./../src/operationResut");
 
 describe("#getOperationResult()", () => {
   it("should return the result of transaction process", () => {

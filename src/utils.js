@@ -1,8 +1,7 @@
-const saveRecord = require("./saveRecord").saveRecord;
-const query = require("./query").query;
-const validateTransaction = require("./validateTransaction")
-  .validateTransaction;
-  const getOperationResult = require('./operationResut').getOperationResult;
+const { saveRecord } = require("./saveRecord");
+const { query } = require("./query");
+const { validateTransaction } = require("./validateTransaction");
+const { getOperationResult } = require("./operationResut");
 
 const formatArgs = function(args) {
   const userArgs = args.slice(2);
@@ -77,11 +76,13 @@ const executeTransaction = function(args, config) {
   return message;
 };
 
-exports.formatArgs = formatArgs;
-exports.getOperation = getOperation;
-exports.getTransactionPrototype = getTransactionPrototype;
-exports.updateTransactionDetails = updateTransactionDetails;
-exports.parseTransaction = parseTransaction;
-exports.errorMessage = errorMessage;
-exports.validateTransaction = validateTransaction;
-exports.executeTransaction = executeTransaction;
+module.exports = {
+  formatArgs,
+  getOperation,
+  getTransactionPrototype,
+  updateTransactionDetails,
+  parseTransaction,
+  errorMessage,
+  validateTransaction,
+  executeTransaction
+};

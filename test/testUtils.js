@@ -1,14 +1,14 @@
 const assert = require("assert");
-const utils = require("./../src/utils");
-const chalk = require("chalk");
 
-const formatArgs = utils.formatArgs;
-const getOperation = utils.getOperation;
-const getTransactionPrototype = utils.getTransactionPrototype;
-const updateTransactionDetails = utils.updateTransactionDetails;
-const parseTransaction = utils.parseTransaction;
-const errorMessage = utils.errorMessage;
-const executeTransaction = utils.executeTransaction;
+const {
+  formatArgs,
+  getOperation,
+  getTransactionPrototype,
+  updateTransactionDetails,
+  parseTransaction,
+  errorMessage,
+  executeTransaction
+} = require("./../src/utils");
 
 const saveRecord = require("./../src/saveRecord").saveRecord;
 const query = require("./../src/query").query;
@@ -40,7 +40,7 @@ describe("#getOperation()", function() {
   it("should return error message when wrong command is given", () => {
     const args = "--command --empId 12345";
     const actual = getOperation(args);
-    const expected = utils.errorMessage;
+    const expected = errorMessage;
     assert.deepStrictEqual(actual, expected);
   });
 });

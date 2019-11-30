@@ -50,8 +50,10 @@ const validateTransaction = function(transaction, args) {
   return result;
 };
 
-exports.isValidBeverage = isValidBeverage;
-exports.isValidQty = isValidQty;
-exports.isValidEmpId = isValidEmpId;
-exports.isValidDate = isValidDate;
-exports.validateTransaction = validateTransaction;
+module.exports = {
+  isValidBeverage,
+  isValidQty,
+  isValidEmpId,
+  isValidDate,
+  validateTransaction
+};
