@@ -5,7 +5,8 @@ const main = function(args) {
   const config = {
     date: new Date(),
     readFile: fs.readFileSync,
-    writeFile: fs.writeFileSync
+    writeFile: fs.writeFileSync,
+    exists: fs.existsSync
   };
   const result = executeTransaction(args, config);
   console.log(result);

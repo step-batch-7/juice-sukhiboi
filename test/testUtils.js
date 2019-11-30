@@ -10,8 +10,8 @@ const {
   executeTransaction
 } = require("./../src/utils");
 
-const saveRecord = require("./../src/saveRecord").saveRecord;
-const query = require("./../src/query").query;
+const { saveRecord } = require("./../src/saveRecord");
+const { query } = require("./../src/query");
 
 describe("#formatArgs()", () => {
   it("should return user arguments", () => {
@@ -24,9 +24,7 @@ describe("#formatArgs()", () => {
 
 describe("#getOperation()", function() {
   it("should return the saveRecord function when save command is given", function() {
-    const userArgs = "--save --beverage Orange --empId 11111 --qty 1".split(
-      " "
-    );
+    const userArgs = "--save --beverage Orange --empId 11111 --qty 1".split(" ");
     const actual = getOperation(userArgs);
     const expected = saveRecord;
     assert.deepStrictEqual(actual, expected);
@@ -167,7 +165,6 @@ describe("#errorMessage()", () => {
 describe("#executeTransaction()", () => {
   it("should execute save command on given args with given configs ", () => {
     const args = "node beverage.js --save --beverage Orange --empId 11111 --qty 2".split(" ");
-
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
@@ -175,9 +172,7 @@ describe("#executeTransaction()", () => {
         '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"}]';
       return contents;
     };
-
     const date = new Date();
-
     const writeFile = function(filename, record) {
       const expectedFilename = "./beverageRecords.json";
       const expectedRecord =
@@ -188,24 +183,22 @@ describe("#executeTransaction()", () => {
       assert.equal(record, expectedRecord);
       return true;
     };
-
+    const existsSync = function(filename) {
+      assert.strictEqual(filename, "./beverageRecords.json");
+      return true;
+    };
     const config = {
       date: date,
       readFile: readFile,
-      writeFile: writeFile
+      writeFile: writeFile,
+      exists: existsSync
     };
-
     const actual = executeTransaction(args, config);
-    const expected = '\nTransaction Recorded: \nEmployeeId, Beverage, Quantity, Date\n11111, Orange, 2, ' + config.date.toJSON()
-
+    const expected = "\nTransaction Recorded: \nEmployeeId, Beverage, Quantity, Date\n11111, Orange, 2, " + config.date.toJSON();
     assert.deepStrictEqual(actual, expected);
-
   });
   it("should execute query command on given args with given configs ", () => {
-    const args = "node beverage.js --query --empId 11111".split(
-      " "
-    );
-
+    const args = "node beverage.js --query --empId 11111".split(" ");
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
@@ -213,19 +206,19 @@ describe("#executeTransaction()", () => {
         '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"}]';
       return contents;
     };
-
+    const existsSync = function(filename) {
+      assert.strictEqual(filename, "./beverageRecords.json");
+      return true;
+    };
     const date = new Date();
-
     const config = {
       date: date,
       readFile: readFile,
-      writeFile: undefined
+      writeFile: undefined,
+      exists: existsSync
     };
-
     const actual = executeTransaction(args, config);
-    const expected =
-      "\nEmployeeId, Beverage, Quantity, Date\n11111,Orange,5,2019-11-25T06:16:09.419Z\n\nTotal: 5 Juices";
-
+    const expected = "\nEmployeeId, Beverage, Quantity, Date\n11111,Orange,5,2019-11-25T06:16:09.419Z\nTotal: 5 Juices";
     assert.deepStrictEqual(actual, expected);
   });
 });

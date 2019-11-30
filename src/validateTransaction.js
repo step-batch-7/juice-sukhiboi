@@ -1,13 +1,11 @@
 const invalidateTransactionObject = function(transaction, args) {
   const optionValues = Object.values(transaction);
-
   if (args[0] == "--query") {
     const result = optionValues.some(function(option) {
       return option != undefined;
     });
     return !result;
   }
-
   const result = optionValues.some(function(option) {
     return option == undefined;
   });
@@ -35,7 +33,7 @@ const isValidDate = function(date) {
 
 const validateTransaction = function(transaction, args) {
   if (invalidateTransactionObject(transaction, args)) return false;
-
+  
   const beverage = transaction["--beverage"];
   const qty = transaction["--qty"];
   const empId = transaction["--empId"];

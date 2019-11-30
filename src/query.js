@@ -25,9 +25,7 @@ const getValidKeys = function(transaction) {
 const filterRecords = function(records, transaction) {
   const keys = getValidKeys(transaction);
   if (keys.length == 0) return [];
-
   const filters = keys.map(key => createFilter(key, transaction[key]));
-
   let filteredRecords = records;
   for (filter of filters) {
     filteredRecords = filter(filteredRecords);
@@ -35,16 +33,18 @@ const filterRecords = function(records, transaction) {
   return filteredRecords;
 };
 
-const getRecords = function(filename, readFile) {
-  const contents = readFile(filename, "utf8");
+const getRecords = function(filename, config) {
+  let contents = "[]";
+  if (config.exists(filename)) {
+    contents = config.readFile(filename, "utf8");
+  }
   const recordsAsJSON = JSON.parse(contents);
   return recordsAsJSON;
 };
 
 const query = function(transaction, config) {
-  if (transaction.error != undefined) return transaction;
   const filename = "./beverageRecords.json";
-  const records = getRecords(filename, config.readFile);
+  const records = getRecords(filename, config);
   const userTransactions = filterRecords(records, transaction);
   if (userTransactions.error != undefined) return userTransactions;
   return userTransactions;

@@ -1,5 +1,4 @@
 const assert = require("assert");
-
 const {
   saveRecord,
   updateRecord,
@@ -14,9 +13,7 @@ describe("#saveRecord()", () => {
       "--empId": "11111",
       "--qty": "2"
     };
-
     const date = new Date();
-
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
@@ -24,7 +21,6 @@ describe("#saveRecord()", () => {
         '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"}]';
       return contents;
     };
-
     const writeFile = function(filename, record) {
       const expectedFilename = "./beverageRecords.json";
       const expectedRecord =
@@ -35,56 +31,40 @@ describe("#saveRecord()", () => {
       assert.equal(record, expectedRecord);
       return true;
     };
-
+    const existsSync = function(filename) {
+      assert.strictEqual(filename, "./beverageRecords.json");
+      return true;
+    };
     const config = {
       date: date,
       readFile: readFile,
-      writeFile: writeFile
+      writeFile: writeFile,
+      exists: existsSync
     };
-
     const actual = saveRecord(transaction, config);
-
     const expected = {
       "--beverage": "Orange",
       "--qty": "2",
       "--date": date,
       "--empId": "11111"
     };
-
     assert.deepStrictEqual(actual, expected);
   });
   it("should return error when transaction has error", () => {
     const transaction = {
       error: "Invalid Options"
     };
-
     const date = new Date();
-
-    const readFile = function(filename, encoding) {
-      assert.equal(filename, "./beverageRecords.json");
-      assert.equal(encoding, "utf8");
-      const contents =
-        '{"11111p":[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z"}]}';
-      return contents;
+    const config = {
+      date: date,
+      readFile: undefined,
+      writeFile: undefined,
+      exists: undefined
     };
-
-    const writeFile = function(filename, record) {
-      const expectedFilename = "./beverageRecords.json";
-      const expectedRecord =
-        '{"11111p":[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z"},{"--beverage":"Orange","--qty":"2","--date":"' +
-        date.toJSON() +
-        '"}]}';
-      assert.equal(filename, expectedFilename);
-      assert.equal(record, expectedRecord);
-      return true;
-    };
-
-    const actual = saveRecord(transaction, date, readFile, writeFile);
-
+    const actual = saveRecord(transaction, config);
     const expected = {
       error: "Invalid Options"
     };
-
     assert.deepStrictEqual(actual, expected);
   });
 });
@@ -92,16 +72,13 @@ describe("#saveRecord()", () => {
 describe("#updateRecord()", () => {
   it("should update the transaction list by inserting current transaction", () => {
     const date = new Date();
-
     const record = {
       "--beverage": "Orange",
       "--qty": "2",
       "--date": date,
       "--empId": "11111"
     };
-
     const filename = "./beverageRecords.json";
-
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
@@ -109,7 +86,6 @@ describe("#updateRecord()", () => {
         '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"}]';
       return contents;
     };
-
     const writeFile = function(filename, record) {
       const expectedFilename = "./beverageRecords.json";
       const expectedRecord =
@@ -120,8 +96,60 @@ describe("#updateRecord()", () => {
       assert.equal(record, expectedRecord);
       return true;
     };
-
-    const actual = updateRecord(record, filename, readFile, writeFile);
+    const existsSync = function(filename) {
+      assert.strictEqual(filename, "./beverageRecords.json");
+      return true;
+    };
+    const config = {
+      date: date,
+      readFile: readFile,
+      writeFile: writeFile,
+      exists: existsSync
+    };
+    const actual = updateRecord(record, filename, config);
+    const expected = {
+      "--beverage": "Orange",
+      "--date": date,
+      "--qty": "2",
+      "--empId": "11111"
+    };
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should create a new file with inserting the current record when data strore file doesn't exists", () => {
+    const date = new Date();
+    const record = {
+      "--beverage": "Orange",
+      "--qty": "2",
+      "--date": date,
+      "--empId": "11111"
+    };
+    const filename = "./beverageRecords.json";
+    const readFile = function(filename, encoding) {
+      assert.equal(filename, "./beverageRecords.json");
+      assert.equal(encoding, "utf8");
+      return new Error("File doesn't exists");
+    };
+    const writeFile = function(filename, record) {
+      const expectedFilename = "./beverageRecords.json";
+      const expectedRecord =
+        '[{"--beverage":"Orange","--qty":"2","--date":"' +
+        date.toJSON() +
+        '","--empId":"11111"}]';
+      assert.equal(filename, expectedFilename);
+      assert.equal(record, expectedRecord);
+      return true;
+    };
+    const existsSync = function(filename) {
+      assert.strictEqual(filename, "./beverageRecords.json");
+      return false;
+    };
+    const config = {
+      date: date,
+      readFile: readFile,
+      writeFile: writeFile,
+      exists: existsSync
+    };
+    const actual = updateRecord(record, filename, config);
     const expected = {
       "--beverage": "Orange",
       "--date": date,

@@ -20,8 +20,8 @@ const queryRecordResult = function(operationResult) {
     context = context + +record["--qty"];
     return context;
   }, 0);
-  let footer = `\n\nTotal: ${totalBeverages} Juices`;
-  if (totalBeverages < 2) footer = `\n\nTotal: ${totalBeverages} Juice`;
+  let footer = `\nTotal: ${totalBeverages} Juices`;
+  if (totalBeverages < 2) footer = `\nTotal: ${totalBeverages} Juice`;
   const result = headings + transactions.join("\n") + footer;
   return result;
 };

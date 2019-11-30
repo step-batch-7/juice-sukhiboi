@@ -43,15 +43,14 @@ describe("#saveRecordResult()", () => {
     };
     const actual = saveRecordResult(operationResult);
     const expected =
-      "\nTransaction Recorded: \nEmployeeId, Beverage, Quantity, Date\n21, Orange, 1, " +
-      date.toJSON();
+      "\nTransaction Recorded: \nEmployeeId, Beverage, Quantity, Date\n21, Orange, 1, " + date.toJSON();
     assert.deepStrictEqual(actual, expected);
   });
 });
 
 describe("#queryRecordResult()", () => {
   const date = new Date();
-  it("should give result of a query command", () => {
+  it("should give result of a query command when the number of records is greater than 1", () => {
     const operationResult = [
       {
         "--beverage": "Orange",
@@ -69,15 +68,25 @@ describe("#queryRecordResult()", () => {
     const actual = queryRecordResult(operationResult);
     const expected =
       "\n" +
-      "EmployeeId, Beverage, Quantity, Date\n" +
-      "21,Orange,1," +
-      date.toJSON() +
-      "\n" +
-      "21,Orange,1," +
-      date.toJSON() +
-      "\n" +
-      "\n" +
+      "EmployeeId, Beverage, Quantity, Date\n" + "21,Orange,1," + date.toJSON() + "\n" +
+      "21,Orange,1," + date.toJSON() + "\n" +
       "Total: 2 Juices";
     assert.deepStrictEqual(actual, expected);
   });
+  it("should giev result of a query command when the number of records is less than 2", () => {
+     const operationResult = [
+       {
+         "--beverage": "Orange",
+         "--qty": "1",
+         "--date": date.toJSON(),
+         "--empId": "21"
+       }
+     ];
+     const actual = queryRecordResult(operationResult);
+     const expected =
+       "\n" + 
+       "EmployeeId, Beverage, Quantity, Date\n" + "21,Orange,1," + date.toJSON() + "\n" +
+       "Total: 1 Juice";
+     assert.deepStrictEqual(actual, expected);
+  })
 });

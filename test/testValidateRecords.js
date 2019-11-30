@@ -87,9 +87,7 @@ describe("#validateTransaction()", () => {
     assert.deepStrictEqual(actual, expected);
   });
   it("should invalidate the save command for incorrect options given", () => {
-    const args = "--save --beverage Orange --empId 11111q --quantity 1".split(
-      " "
-    );
+    const args = "--save --beverage Orange --empId 11111q --quantity 1".split(" ");
     const transaction = {
       "--beverage": "Orange",
       "--empId": "11111q",
@@ -130,19 +128,15 @@ describe("#validateTransaction()", () => {
     const args1 = "--query --date 201k".split(" ");
     const transaction1 = { "--date": "201k" };
     const actual1 = validateTransaction(transaction1, args1);
-
     const args2 = "--query --date 2019-13-01".split(" ");
     const transaction2 = { "--date": "2019-13-01" };
     const actual2 = validateTransaction(transaction2, args2);
-
     const args3 = "--query --date 2019-12-32".split(" ");
     const transaction3 = { "--date": "2019-12-32" };
     const actual3 = validateTransaction(transaction3, args3);
-
     const args4 = "--query --date 234k-12-32".split(" ");
     const transaction4 = { "--date": "234k-12-32" };
     const actual4 = validateTransaction(transaction4, args4);
-
     const expected = false;
     assert.deepStrictEqual(actual1, expected);
     assert.deepStrictEqual(actual2, expected);
