@@ -1,93 +1,79 @@
 const chai = require("chai");
 const assert = chai.assert;
-const chalk = require("chalk");
-const {
-  getOperationResult,
-  queryRecordResult,
-  saveRecordResult
-} = require("./../src/operationResut");
+const { joinHeader, joinBeverageCount } = require("./../src/operationResut");
 
-describe("#getOperationResult()", () => {
-  it("should return the result of transaction process", () => {
+describe("#joinHearder()", () => {
+  it("should append the header at the begining for save command", () => {
     const date = new Date();
-    const args = "--save --beverage Orange --empId 21 --qty 5".split(" ");
-    const transactionResult = {
-      "--beverage": "Orange",
-      "--qty": "5",
-      "--date": date,
-      "--empId": "21"
-    };
-    const actual = getOperationResult(transactionResult, args);
-    const expected =
-      "\nTransaction Recorded:\nEmployeeId,Beverage,Quantity,Date\n21,Orange,5," +
-      date.toJSON();
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should return error when error is given as an argument", () => {
-    const errorObject = {
-      error: "Invalid Command"
-    };
-    const actual = getOperationResult(errorObject);
-    const expected = chalk.bold.red(`\nInvalid Command`);
-    assert.deepStrictEqual(actual, expected);
-  });
-});
-
-describe("#saveRecordResult()", () => {
-  const date = new Date();
-  it("should return result of a save command", () => {
-    const operationResult = {
-      "--beverage": "Orange",
-      "--qty": "1",
-      "--date": date,
-      "--empId": 21
-    };
-    const actual = saveRecordResult(operationResult);
-    const expected =
-      "\nTransaction Recorded:\nEmployeeId,Beverage,Quantity,Date\n21,Orange,1," + date.toJSON();
-    assert.deepStrictEqual(actual, expected);
-  });
-});
-
-describe("#queryRecordResult()", () => {
-  const date = new Date();
-  it("should give result of a query command when the number of records is greater than 1", () => {
-    const operationResult = [
+    const result = [
       {
+        "--empId": "11111",
         "--beverage": "Orange",
-        "--qty": "1",
-        "--date": date.toJSON(),
-        "--empId": "21"
-      },
-      {
-        "--beverage": "Orange",
-        "--qty": "1",
-        "--date": date.toJSON(),
-        "--empId": "21"
+        "--qty": "3",
+        "--date": date
       }
     ];
-    const actual = queryRecordResult(operationResult);
+    const toJson = true;
+    const actual = joinHeader(result, toJson);
     const expected =
-      "\n" +
-      "EmployeeId,Beverage,Quantity,Date\n" + "21,Orange,1," + date.toJSON() + "\n" +
-      "21,Orange,1," + date.toJSON() + "\n" +
-      "Total: 2 Juices";
-    assert.deepStrictEqual(actual, expected);
+      "\nEmployeeId,Beverage,Quantity,Date\n11111,Orange,3," + date.toJSON();
+    assert.strictEqual(actual, expected);
   });
-  it("should giev result of a query command when the number of records is less than 2", () => {
-     const operationResult = [
-       {
-         "--beverage": "Orange",
-         "--qty": "1",
-         "--date": date.toJSON(),
-         "--empId": "21"
-       }
-     ];
-     const actual = queryRecordResult(operationResult);
-     const expected =
-       "\n" + 
-       "EmployeeId,Beverage,Quantity,Date\n" + "21,Orange,1," + date.toJSON() + "\n" +
-       "Total: 1 Juice";
-     assert.deepStrictEqual(actual, expected);
-  })
+  it("should append the header at the begining for query command", () => {
+    const result = [
+      {
+        "--empId": "11111",
+        "--beverage": "Orange",
+        "--qty": "3",
+        "--date": "2019-12-01T17:34:30.323Z"
+      },
+      {
+        "--empId": "11111",
+        "--beverage": "Orange",
+        "--qty": "7",
+        "--date": "2019-12-01T17:34:30.323Z"
+      }
+    ];
+    const actual = joinHeader(result);
+    const expected =
+      "\nEmployeeId,Beverage,Quantity,Date\n" +
+      "11111,Orange,3,2019-12-01T17:34:30.323Z\n" +
+      "11111,Orange,7,2019-12-01T17:34:30.323Z";
+    assert.strictEqual(actual, expected);
+  });
+});
+
+describe("#joinBeverageCount()", () => {
+  it("should evaluate beverage count based on result for less than 2 jucice", () => {
+    const result = [
+      {
+        "--empId": "11111",
+        "--beverage": "Orange",
+        "--qty": "1",
+        "--date": "2019-12-01T17:34:30.323Z"
+      },
+    ];
+    const actual = joinBeverageCount(result);
+    const expected = "\nTotal: 1 Juice";
+    assert.strictEqual(actual, expected);
+  });
+  it("should evaluate beverage count based on result for more than 1 jucices", () => {
+    const result = [
+      {
+        "--empId": "11111",
+        "--beverage": "Orange",
+        "--qty": "1",
+        "--date": "2019-12-01T17:34:30.323Z"
+      },
+      {
+        "--empId": "11111",
+        "--beverage": "Orange",
+        "--qty": "4",
+        "--date": "2019-12-01T17:34:30.323Z"
+      }
+    ];
+    const actual = joinBeverageCount(result);
+    const expected = "\nTotal: 5 Juices";
+    assert.strictEqual(actual, expected);
+  });
 });

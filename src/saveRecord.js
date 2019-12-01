@@ -29,7 +29,7 @@ const saveRecord = function(transaction, config) {
   if (transaction.error != undefined) return transaction;
   const record = createTransactionRecord(transaction, config.date);
   const latestRecord = updateRecord(record, config);
-  return latestRecord;
+  return [latestRecord];
 };
 
 module.exports = {

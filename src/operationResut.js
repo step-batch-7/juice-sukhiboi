@@ -1,46 +1,29 @@
-const chalk = require("chalk");
-
-const saveRecordResult = function(operationResult) {
-  const successMessage = "\nTransaction Recorded:\n";
-  const headings = "EmployeeId,Beverage,Quantity,Date\n";
-  const transactionData = `${operationResult["--empId"]},${
-    operationResult["--beverage"]
-  },${operationResult["--qty"]},${operationResult["--date"].toJSON()}`;
-  const result = successMessage + headings + transactionData;
-  return result;
-};
-
-const queryRecordResult = function(operationResult) {
-  const headings = "\nEmployeeId,Beverage,Quantity,Date\n";
-  const transactions = operationResult.map(record => {
-    const row = `${record["--empId"]},${record["--beverage"]},${record["--qty"]},${record["--date"]}`;
-    return row;
-  });
-  const totalBeverages = operationResult.reduce((context, record) => {
+const joinBeverageCount = function(result) {
+  const totalBeverages = result.reduce((context, record) => {
     context = context + +record["--qty"];
     return context;
   }, 0);
-  let footer = `\nTotal: ${totalBeverages} Juices`;
-  if (totalBeverages < 2) footer = `\nTotal: ${totalBeverages} Juice`;
-  const result = headings + transactions.join("\n") + footer;
-  return result;
+  let message = "";
+  message = `\nTotal: ${totalBeverages} Juices`;
+  if (totalBeverages < 2) message = `\nTotal: ${totalBeverages} Juice`;
+  return message;
 };
 
-const getOperationResult = function(operationResult, userArgs) {
-  if (operationResult.error != undefined)
-    return chalk.bold.red(`\n${operationResult.error}`);
-  const results = {
-    "--save": saveRecordResult,
-    "--query": queryRecordResult
-  };
-  const operation = userArgs[0];
-  const resultOperation = results[operation];
-  const result = resultOperation(operationResult);
-  return result;
+const joinHeader = function(result, toJson) {
+  const header = "\nEmployeeId,Beverage,Quantity,Date\n";
+  const records = result.map(transaction => {
+    const empId = transaction["--empId"];
+    const beverage = transaction["--beverage"];
+    const qty = transaction["--qty"];
+    let date = transaction["--date"];
+    if (toJson) date = date.toJSON();
+    return `${empId},${beverage},${qty},${date}`;
+  });
+  const message = header + [...records].join("\n");
+  return message;
 };
 
 module.exports = {
-  getOperationResult,
-  saveRecordResult,
-  queryRecordResult
+  joinHeader,
+  joinBeverageCount
 };

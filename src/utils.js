@@ -1,7 +1,7 @@
 const { saveRecord } = require("./saveRecord");
 const { query } = require("./query");
 const { validateTransaction } = require("./validateTransaction");
-const { getOperationResult } = require("./operationResut");
+const { joinHeader, joinBeverageCount } = require("./operationResut");
 
 const formatArgs = function(args) {
   const userArgs = args.slice(2);
@@ -72,7 +72,17 @@ const executeTransaction = function(args, config) {
   const operation = getOperation(userArgs);
   const transaction = parseTransaction(userArgs);
   const result = operation(transaction, config);
-  const message = getOperationResult(result, userArgs);
+  if (result.error != undefined) {
+    return `\n${result.error}`;
+  }
+  let message = "";
+  if(userArgs[0] == "--save"){
+    const transactionSavedMsg = "\nTransaction Recorded:";
+    const toJson = true;
+    let message = transactionSavedMsg + joinHeader(result, toJson);
+    return message
+  }
+  message = joinHeader(result) + joinBeverageCount(result);
   return message;
 };
 

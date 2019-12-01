@@ -44,12 +44,12 @@ describe("#saveRecord()", () => {
       exists: existsSync
     };
     const actual = saveRecord(transaction, config);
-    const expected = {
+    const expected = [{
       "--beverage": "Orange",
       "--qty": "2",
       "--date": date,
       "--empId": "11111"
-    };
+    }];
     assert.deepStrictEqual(actual, expected);
   });
   it("should return error when transaction has error", () => {

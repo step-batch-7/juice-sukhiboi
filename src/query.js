@@ -43,6 +43,7 @@ const getRecords = function(config) {
 };
 
 const query = function(transaction, config) {
+  if (transaction.error != undefined) return transaction;
   const records = getRecords(config);
   const userTransactions = filterRecords(records, transaction);
   if (userTransactions.error != undefined) return userTransactions;

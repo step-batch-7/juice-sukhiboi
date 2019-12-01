@@ -24,7 +24,9 @@ describe("#formatArgs()", () => {
 
 describe("#getOperation()", function() {
   it("should return the saveRecord function when save command is given", function() {
-    const userArgs = "--save --beverage Orange --empId 11111 --qty 1".split(" ");
+    const userArgs = "--save --beverage Orange --empId 11111 --qty 1".split(
+      " "
+    );
     const actual = getOperation(userArgs);
     const expected = saveRecord;
     assert.deepStrictEqual(actual, expected);
@@ -164,7 +166,9 @@ describe("#errorMessage()", () => {
 
 describe("#executeTransaction()", () => {
   it("should execute save command on given args with given configs ", () => {
-    const args = "node beverage.js --save --beverage Orange --empId 11111 --qty 2".split(" ");
+    const args = "node beverage.js --save --beverage Orange --empId 11111 --qty 2".split(
+      " "
+    );
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
@@ -195,7 +199,9 @@ describe("#executeTransaction()", () => {
       exists: existsSync
     };
     const actual = executeTransaction(args, config);
-    const expected = "\nTransaction Recorded:\nEmployeeId,Beverage,Quantity,Date\n11111,Orange,2," + config.date.toJSON();
+    const expected =
+      "\nTransaction Recorded:\nEmployeeId,Beverage,Quantity,Date\n11111,Orange,2," +
+      config.date.toJSON();
     assert.deepStrictEqual(actual, expected);
   });
   it("should execute query command on given args with given configs ", () => {
@@ -220,7 +226,34 @@ describe("#executeTransaction()", () => {
       exists: existsSync
     };
     const actual = executeTransaction(args, config);
-    const expected = "\nEmployeeId,Beverage,Quantity,Date\n11111,Orange,5,2019-11-25T06:16:09.419Z\nTotal: 5 Juices";
+    const expected =
+      "\nEmployeeId,Beverage,Quantity,Date\n11111,Orange,5,2019-11-25T06:16:09.419Z\nTotal: 5 Juices";
     assert.deepStrictEqual(actual, expected);
+  });
+  it("should given error if wrong option given for save command", () => {
+    const args = "node,beverage.js,--save,--empId 234r".split(",");
+    const config = {
+      filename: undefined,
+      date: undefined,
+      readFile: undefined,
+      writeFile: undefined,
+      exists: undefined
+    };
+    const actual = executeTransaction(args, config);
+    const expected = "\nInvalid Options";
+    assert.strictEqual(actual, expected);
+  });
+  it("should given error if wrong option given for query command", () => {
+    const args = "node,beverage.js,--query,--empId 234r".split(",");
+    const config = {
+      filename: undefined,
+      date: undefined,
+      readFile: undefined,
+      writeFile: undefined,
+      exists: undefined
+    };
+    const actual = executeTransaction(args, config);
+    const expected = "\nInvalid Options";
+    assert.strictEqual(actual, expected);
   });
 });
