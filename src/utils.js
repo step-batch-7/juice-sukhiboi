@@ -62,8 +62,8 @@ const parseTransaction = function(args) {
   const transactionDetails = getTransactionPrototype(operation);
   if (transactionDetails.error != undefined) return transactionDetails;
   const transaction = updateTransactionDetails(transactionDetails, args);
-  const result = validateTransaction(transaction, args);
-  if (result) return transactionDetails;
+  const result = validateTransaction(args);
+  if (result) return transaction;
   return { error: "Invalid Options" };
 };
 
