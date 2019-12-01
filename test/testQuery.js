@@ -140,7 +140,6 @@ describe("#filterRecords()", () => {
 
 describe("#getRecords()", () => {
   it("should give all the records from the file given", () => {
-    const filename = "./beverageRecords.json";
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
@@ -153,11 +152,13 @@ describe("#getRecords()", () => {
       return true;
     };
     const config = {
+      filename: "./beverageRecords.json",
+      date: new Date(),
       readFile: readFile,
       writeFile: undefined,
       exists: existsSync
     };
-    const actual = getRecords(filename, config);
+    const actual = getRecords(config);
     const expected = [
       {
         "--beverage": "Orange",
@@ -186,6 +187,7 @@ describe("#query()", () => {
       return true;
     };
     const config = {
+      filename: "./beverageRecords.json",
       date: date,
       readFile: readFile,
       writeFile: undefined,
@@ -210,6 +212,7 @@ describe("#query()", () => {
     };
     const date = new Date();
     const config = {
+      filename: "./beverageRecords.json",
       date: date,
       readFile: readFile,
       writeFile: undefined,
@@ -234,6 +237,7 @@ describe("#query()", () => {
     };
     const date = new Date();
     const config = {
+      filename: "./beverageRecords.json",
       date: date,
       readFile: readFile,
       writeFile: undefined,
@@ -265,6 +269,7 @@ describe("#query()", () => {
       return true;
     };
     const config = {
+      filename: "./beverageRecords.json",
       date: date,
       readFile: readFile,
       writeFile: undefined,

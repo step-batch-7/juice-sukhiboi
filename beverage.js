@@ -2,8 +2,10 @@ const fs = require("fs");
 const { executeTransaction } = require("./src/utils");
 
 const main = function(args) {
+  const envDate = new Date(process.env.date);
   const config = {
-    date: new Date(),
+    filename: process.env.filename || "./beverageRecords.json",
+    date: envDate.valueOf() ? envDate : new Date(),
     readFile: fs.readFileSync,
     writeFile: fs.writeFileSync,
     exists: fs.existsSync

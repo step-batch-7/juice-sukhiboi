@@ -37,6 +37,7 @@ describe("#saveRecord()", () => {
       return true;
     };
     const config = {
+      filename: "./beverageRecords.json",
       date: date,
       readFile: readFile,
       writeFile: writeFile,
@@ -102,12 +103,13 @@ describe("#updateRecord()", () => {
       return true;
     };
     const config = {
+      filename: "./beverageRecords.json",
       date: date,
       readFile: readFile,
       writeFile: writeFile,
       exists: existsSync
     };
-    const actual = updateRecord(record, filename, config);
+    const actual = updateRecord(record, config);
     const expected = {
       "--beverage": "Orange",
       "--date": date,
@@ -145,12 +147,13 @@ describe("#updateRecord()", () => {
       return false;
     };
     const config = {
+      filename: "./beverageRecords.json",
       date: date,
       readFile: readFile,
       writeFile: writeFile,
       exists: existsSync
     };
-    const actual = updateRecord(record, filename, config);
+    const actual = updateRecord(record, config);
     const expected = {
       "--beverage": "Orange",
       "--date": date,

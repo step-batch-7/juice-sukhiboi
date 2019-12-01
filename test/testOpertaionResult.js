@@ -19,7 +19,7 @@ describe("#getOperationResult()", () => {
     };
     const actual = getOperationResult(transactionResult, args);
     const expected =
-      "\nTransaction Recorded: \nEmployeeId, Beverage, Quantity, Date\n21, Orange, 5, " +
+      "\nTransaction Recorded:\nEmployeeId,Beverage,Quantity,Date\n21,Orange,5," +
       date.toJSON();
     assert.deepStrictEqual(actual, expected);
   });
@@ -44,7 +44,7 @@ describe("#saveRecordResult()", () => {
     };
     const actual = saveRecordResult(operationResult);
     const expected =
-      "\nTransaction Recorded: \nEmployeeId, Beverage, Quantity, Date\n21, Orange, 1, " + date.toJSON();
+      "\nTransaction Recorded:\nEmployeeId,Beverage,Quantity,Date\n21,Orange,1," + date.toJSON();
     assert.deepStrictEqual(actual, expected);
   });
 });
@@ -69,7 +69,7 @@ describe("#queryRecordResult()", () => {
     const actual = queryRecordResult(operationResult);
     const expected =
       "\n" +
-      "EmployeeId, Beverage, Quantity, Date\n" + "21,Orange,1," + date.toJSON() + "\n" +
+      "EmployeeId,Beverage,Quantity,Date\n" + "21,Orange,1," + date.toJSON() + "\n" +
       "21,Orange,1," + date.toJSON() + "\n" +
       "Total: 2 Juices";
     assert.deepStrictEqual(actual, expected);
@@ -86,7 +86,7 @@ describe("#queryRecordResult()", () => {
      const actual = queryRecordResult(operationResult);
      const expected =
        "\n" + 
-       "EmployeeId, Beverage, Quantity, Date\n" + "21,Orange,1," + date.toJSON() + "\n" +
+       "EmployeeId,Beverage,Quantity,Date\n" + "21,Orange,1," + date.toJSON() + "\n" +
        "Total: 1 Juice";
      assert.deepStrictEqual(actual, expected);
   })

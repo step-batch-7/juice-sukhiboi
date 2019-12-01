@@ -33,18 +33,17 @@ const filterRecords = function(records, transaction) {
   return filteredRecords;
 };
 
-const getRecords = function(filename, config) {
+const getRecords = function(config) {
   let contents = "[]";
-  if (config.exists(filename)) {
-    contents = config.readFile(filename, "utf8");
+  if (config.exists(config.filename)) {
+    contents = config.readFile(config.filename, "utf8");
   }
   const recordsAsJSON = JSON.parse(contents);
   return recordsAsJSON;
 };
 
 const query = function(transaction, config) {
-  const filename = "./beverageRecords.json";
-  const records = getRecords(filename, config);
+  const records = getRecords(config);
   const userTransactions = filterRecords(records, transaction);
   if (userTransactions.error != undefined) return userTransactions;
   return userTransactions;

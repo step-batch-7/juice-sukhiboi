@@ -1,17 +1,17 @@
 const chalk = require("chalk");
 
 const saveRecordResult = function(operationResult) {
-  const successMessage = "\nTransaction Recorded: \n";
-  const headings = "EmployeeId, Beverage, Quantity, Date\n";
-  const transactionData = `${operationResult["--empId"]}, ${
+  const successMessage = "\nTransaction Recorded:\n";
+  const headings = "EmployeeId,Beverage,Quantity,Date\n";
+  const transactionData = `${operationResult["--empId"]},${
     operationResult["--beverage"]
-  }, ${operationResult["--qty"]}, ${operationResult["--date"].toJSON()}`;
+  },${operationResult["--qty"]},${operationResult["--date"].toJSON()}`;
   const result = successMessage + headings + transactionData;
   return result;
 };
 
 const queryRecordResult = function(operationResult) {
-  const headings = "\nEmployeeId, Beverage, Quantity, Date\n";
+  const headings = "\nEmployeeId,Beverage,Quantity,Date\n";
   const transactions = operationResult.map(record => {
     const row = `${record["--empId"]},${record["--beverage"]},${record["--qty"]},${record["--date"]}`;
     return row;

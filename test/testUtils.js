@@ -188,13 +188,14 @@ describe("#executeTransaction()", () => {
       return true;
     };
     const config = {
+      filename: "./beverageRecords.json",
       date: date,
       readFile: readFile,
       writeFile: writeFile,
       exists: existsSync
     };
     const actual = executeTransaction(args, config);
-    const expected = "\nTransaction Recorded: \nEmployeeId, Beverage, Quantity, Date\n11111, Orange, 2, " + config.date.toJSON();
+    const expected = "\nTransaction Recorded:\nEmployeeId,Beverage,Quantity,Date\n11111,Orange,2," + config.date.toJSON();
     assert.deepStrictEqual(actual, expected);
   });
   it("should execute query command on given args with given configs ", () => {
@@ -212,13 +213,14 @@ describe("#executeTransaction()", () => {
     };
     const date = new Date();
     const config = {
+      filename: "./beverageRecords.json",
       date: date,
       readFile: readFile,
       writeFile: undefined,
       exists: existsSync
     };
     const actual = executeTransaction(args, config);
-    const expected = "\nEmployeeId, Beverage, Quantity, Date\n11111,Orange,5,2019-11-25T06:16:09.419Z\nTotal: 5 Juices";
+    const expected = "\nEmployeeId,Beverage,Quantity,Date\n11111,Orange,5,2019-11-25T06:16:09.419Z\nTotal: 5 Juices";
     assert.deepStrictEqual(actual, expected);
   });
 });
