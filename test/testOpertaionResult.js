@@ -1,4 +1,5 @@
-const assert = require("assert");
+const chai = require("chai");
+const assert = chai.assert;
 const chalk = require("chalk");
 const {
   getOperationResult,
