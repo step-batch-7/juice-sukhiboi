@@ -14,14 +14,14 @@ const getOperation = function(args) {
 const getOptions = function(operation) {
   const transactionObjects = {
     "--save": {
-      "--beverage": undefined,
-      "--empId": undefined,
-      "--qty": undefined
+      beverage: undefined,
+      empId: undefined,
+      qty: undefined
     },
     "--query": {
-      "--beverage": undefined,
-      "--empId": undefined,
-      "--date": undefined
+      beverage: undefined,
+      empId: undefined,
+      date: undefined
     }
   };
   return transactionObjects[operation];
@@ -30,8 +30,8 @@ const getOptions = function(operation) {
 const optionParser = function(transactionDetails, args) {
   let transaction = transactionDetails;
   for (let idx = 0; idx < args.length; idx += 2) {
-    if (args[idx] in transaction) {
-      transaction[args[idx]] = args[idx + 1];
+    if (args[idx].slice(2) in transaction) {
+      transaction[args[idx].slice(2)] = args[idx + 1];
     }
   }
   return transaction;

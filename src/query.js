@@ -3,7 +3,7 @@ const { loadTransactions, getDefinedKeys } = require("./utils");
 const createFilter = function(key, value) {
   return function(records) {
     const filteredRecords = records.filter(record => {
-      if (key == "--date") {
+      if (key == "date") {
         let recordDate = record[key].split("T")[0];
         if (recordDate == value) return record;
       }

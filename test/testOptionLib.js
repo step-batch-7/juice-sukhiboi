@@ -28,9 +28,9 @@ describe("#getOperation()", function() {
 describe("#getOptions()", () => {
   it("should return save transaction prototype when save command is given", () => {
     const expected = {
-      "--beverage": undefined,
-      "--empId": undefined,
-      "--qty": undefined
+      beverage: undefined,
+      empId: undefined,
+      qty: undefined
     };
     const operation = "--save";
     const actual = getOptions(operation);
@@ -38,9 +38,9 @@ describe("#getOptions()", () => {
   });
   it("should return query transaction prototype wrong query command is given", () => {
     const expected = {
-      "--beverage": undefined,
-      "--empId": undefined,
-      "--date": undefined
+      beverage: undefined,
+      empId: undefined,
+      date: undefined
     };
     const operation = "--query";
     const actual = getOptions(operation);
@@ -51,16 +51,16 @@ describe("#getOptions()", () => {
 describe("#optionParser()", () => {
   it("should updtae the transaction details", () => {
     const oldTransactionDetails = {
-      "--beverage": undefined,
-      "--empId": undefined,
-      "--qty": undefined
+      beverage: undefined,
+      empId: undefined,
+      qty: undefined
     };
     const args = "--beverage Orange --empId 11111 --qty 2".split(" ");
     const actual = optionParser(oldTransactionDetails, args);
     const expected = {
-      "--beverage": "Orange",
-      "--empId": "11111",
-      "--qty": "2"
+      beverage: "Orange",
+      empId: "11111",
+      qty: "2"
     };
     assert.deepStrictEqual(actual, expected);
   });

@@ -25,16 +25,16 @@ const formatTransaction = function(args, options) {
 };
 
 const saveValidator = function(transactionDetails, validations) {
-  const validBeverage = validations[0](transactionDetails["--beverage"]);
-  const validEmpId = validations[1](transactionDetails["--empId"]);
-  const validQty = validations[2](transactionDetails["--qty"]);
+  const validBeverage = validations[0](transactionDetails.beverage);
+  const validEmpId = validations[1](transactionDetails.empId);
+  const validQty = validations[2](transactionDetails.qty);
   return validBeverage && validEmpId && validQty;
 };
 
 const queryValidator = function(transactionDetails, validations) {
-  const validBeverage = validations[0](transactionDetails["--beverage"]);
-  const validEmpId = validations[1](transactionDetails["--empId"]);
-  const validDate = validations[2](transactionDetails["--date"]);
+  const validBeverage = validations[0](transactionDetails.beverage);
+  const validEmpId = validations[1](transactionDetails.empId);
+  const validDate = validations[2](transactionDetails.date);
 
   const options = [validBeverage, validEmpId, validDate];
   const validOptions = options.filter(option => option != undefined);
@@ -53,12 +53,12 @@ const validateTransaction = function(args) {
   const option = args[0];
   const validOptions = {
     "--save": {
-      options: ["--beverage", "--empId", "--qty"],
+      options: ["beverage", "empId", "qty"],
       validation: [isValidBeverage, isPositiveInt, isPositiveInt],
       validator: saveValidator
     },
     "--query": {
-      options: ["--beverage", "--empId", "--date"],
+      options: ["beverage", "empId", "date"],
       validation: [isValidBeverage, isPositiveInt, isValidDate],
       validator: queryValidator
     }

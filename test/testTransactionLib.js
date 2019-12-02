@@ -1,5 +1,8 @@
 const assert = require("chai").assert;
-const {parseTransaction, executeTransaction} = require("./../src/transactionLib");
+const {
+  parseTransaction,
+  executeTransaction
+} = require("./../src/transactionLib");
 
 describe("#parseTransaction()", function() {
   it("should return all the required transaction details when save command is given", function() {
@@ -8,9 +11,9 @@ describe("#parseTransaction()", function() {
     );
     const actual = parseTransaction(userArgs);
     const expected = {
-      "--beverage": "Orange",
-      "--empId": "11111",
-      "--qty": "1"
+      beverage: "Orange",
+      empId: "11111",
+      qty: "1"
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -18,9 +21,9 @@ describe("#parseTransaction()", function() {
     const userArgs = "--query --empId 11111".split(" ");
     const actual = parseTransaction(userArgs);
     const expected = {
-      "--empId": "11111",
-      "--date": undefined,
-      "--beverage": undefined
+      empId: "11111",
+      date: undefined,
+      beverage: undefined
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -28,9 +31,9 @@ describe("#parseTransaction()", function() {
     const userArgs = "--query --empId 11111 --date 2019-11-12".split(" ");
     const actual = parseTransaction(userArgs);
     const expected = {
-      "--empId": "11111",
-      "--date": "2019-11-12",
-      "--beverage": undefined
+      empId: "11111",
+      date: "2019-11-12",
+      beverage: undefined
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -38,9 +41,9 @@ describe("#parseTransaction()", function() {
     const userArgs = "--query --date 2019-11-12".split(" ");
     const actual = parseTransaction(userArgs);
     const expected = {
-      "--date": "2019-11-12",
-      "--empId": undefined,
-      "--beverage": undefined
+      date: "2019-11-12",
+      empId: undefined,
+      beverage: undefined
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -55,16 +58,16 @@ describe("#executeTransaction()", () => {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
       const contents =
-        '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"}]';
+        '[{"beverage":"Orange","qty":"5","date":"2019-11-25T06:16:09.419Z","empId":"11111"}]';
       return contents;
     };
     const date = new Date();
     const writeFile = function(filename, record) {
       const expectedFilename = "./beverageRecords.json";
       const expectedRecord =
-        '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"},{"--beverage":"Orange","--qty":"2","--date":"' +
+        '[{"beverage":"Orange","qty":"5","date":"2019-11-25T06:16:09.419Z","empId":"11111"},{"beverage":"Orange","qty":"2","date":"' +
         date.toJSON() +
-        '","--empId":"11111"}]';
+        '","empId":"11111"}]';
       assert.equal(filename, expectedFilename);
       assert.equal(record, expectedRecord);
       return true;
@@ -92,7 +95,7 @@ describe("#executeTransaction()", () => {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
       const contents =
-        '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"}]';
+        '[{"beverage":"Orange","qty":"5","date":"2019-11-25T06:16:09.419Z","empId":"11111"}]';
       return contents;
     };
     const existsSync = function(filename) {

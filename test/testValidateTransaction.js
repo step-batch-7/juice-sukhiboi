@@ -79,13 +79,13 @@ describe("#isValidDate()", () => {
 
 describe("#formatTransaction()", () => {
   it("should parse traction to a object with given keys", () => {
-    const options = ["--beverage", "--empId", "--qty"];
+    const options = ["beverage", "empId", "qty"];
     const args = ["--beverage", "Orange", "--empId", "123", "--qty", "7"];
     const actual = formatTransaction(args, options);
     const expected = {
-      "--beverage": "Orange",
-      "--empId": "123",
-      "--qty": "7"
+      beverage: "Orange",
+      empId: "123",
+      qty: "7"
     };
     assert.deepStrictEqual(actual, expected);
   });

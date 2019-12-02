@@ -7,10 +7,10 @@ describe("#joinHearder()", () => {
     const date = new Date();
     const result = [
       {
-        "--empId": "11111",
-        "--beverage": "Orange",
-        "--qty": "3",
-        "--date": date
+        empId: "11111",
+        beverage: "Orange",
+        qty: "3",
+        date: date
       }
     ];
     const toJson = true;
@@ -22,16 +22,16 @@ describe("#joinHearder()", () => {
   it("should append the header at the begining for query command", () => {
     const result = [
       {
-        "--empId": "11111",
-        "--beverage": "Orange",
-        "--qty": "3",
-        "--date": "2019-12-01T17:34:30.323Z"
+        empId: "11111",
+        beverage: "Orange",
+        qty: "3",
+        date: "2019-12-01T17:34:30.323Z"
       },
       {
-        "--empId": "11111",
-        "--beverage": "Orange",
-        "--qty": "7",
-        "--date": "2019-12-01T17:34:30.323Z"
+        empId: "11111",
+        beverage: "Orange",
+        qty: "7",
+        date: "2019-12-01T17:34:30.323Z"
       }
     ];
     const actual = joinHeader(result);
@@ -47,10 +47,10 @@ describe("#joinBeverageCount()", () => {
   it("should evaluate beverage count based on result for less than 2 jucice", () => {
     const result = [
       {
-        "--empId": "11111",
-        "--beverage": "Orange",
-        "--qty": "1",
-        "--date": "2019-12-01T17:34:30.323Z"
+        empId: "11111",
+        beverage: "Orange",
+        qty: "1",
+        date: "2019-12-01T17:34:30.323Z"
       }
     ];
     const actual = joinBeverageCount(result);
@@ -60,16 +60,16 @@ describe("#joinBeverageCount()", () => {
   it("should evaluate beverage count based on result for more than 1 jucices", () => {
     const result = [
       {
-        "--empId": "11111",
-        "--beverage": "Orange",
-        "--qty": "1",
-        "--date": "2019-12-01T17:34:30.323Z"
+        empId: "11111",
+        beverage: "Orange",
+        qty: "1",
+        date: "2019-12-01T17:34:30.323Z"
       },
       {
-        "--empId": "11111",
-        "--beverage": "Orange",
-        "--qty": "4",
-        "--date": "2019-12-01T17:34:30.323Z"
+        empId: "11111",
+        beverage: "Orange",
+        qty: "4",
+        date: "2019-12-01T17:34:30.323Z"
       }
     ];
     const actual = joinBeverageCount(result);

@@ -5,17 +5,17 @@ const { saveRecord, createTransactionRecord } = require("./../src/saveRecord");
 describe("#createTransactionRecord()", () => {
   it("should create a transaction record", () => {
     const transaction = {
-      "--beverage": "Orange",
-      "--empId": "21",
-      "--qty": "5"
+      beverage: "Orange",
+      empId: "21",
+      qty: "5"
     };
     const date = new Date();
     const actual = createTransactionRecord(transaction, date);
     const expected = {
-      "--beverage": "Orange",
-      "--qty": "5",
-      "--date": date,
-      "--empId": "21"
+      beverage: "Orange",
+      qty: "5",
+      date: date,
+      empId: "21"
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -24,24 +24,24 @@ describe("#createTransactionRecord()", () => {
 describe("#saveRecord()", () => {
   it("should return the given transaction object", () => {
     const transaction = {
-      "--beverage": "Orange",
-      "--empId": "11111",
-      "--qty": "2"
+      beverage: "Orange",
+      empId: "11111",
+      qty: "2"
     };
     const date = new Date();
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
       const contents =
-        '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"}]';
+        '[{"beverage":"Orange","qty":"5","date":"2019-11-25T06:16:09.419Z","empId":"11111"}]';
       return contents;
     };
     const writeFile = function(filename, record) {
       const expectedFilename = "./beverageRecords.json";
       const expectedRecord =
-        '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"},{"--beverage":"Orange","--qty":"2","--date":"' +
+        '[{"beverage":"Orange","qty":"5","date":"2019-11-25T06:16:09.419Z","empId":"11111"},{"beverage":"Orange","qty":"2","date":"' +
         date.toJSON() +
-        '","--empId":"11111"}]';
+        '","empId":"11111"}]';
       assert.equal(filename, expectedFilename);
       assert.equal(record, expectedRecord);
       return true;
@@ -60,10 +60,10 @@ describe("#saveRecord()", () => {
     const actual = saveRecord(transaction, config);
     const expected = [
       {
-        "--beverage": "Orange",
-        "--qty": "2",
-        "--date": date,
-        "--empId": "11111"
+        beverage: "Orange",
+        qty: "2",
+        date: date,
+        empId: "11111"
       }
     ];
     assert.deepStrictEqual(actual, expected);

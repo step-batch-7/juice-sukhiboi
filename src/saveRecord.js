@@ -2,10 +2,10 @@ const { updateTransactions } = require("./utils");
 
 const createTransactionRecord = function(transaction, date) {
   const record = {
-    "--beverage": transaction["--beverage"],
-    "--qty": transaction["--qty"],
-    "--date": date,
-    "--empId": transaction["--empId"]
+    beverage: transaction.beverage,
+    qty: transaction.qty,
+    date: date,
+    empId: transaction.empId
   };
   return record;
 };

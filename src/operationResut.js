@@ -1,6 +1,6 @@
 const joinBeverageCount = function(result) {
   const totalBeverages = result.reduce((context, record) => {
-    context = context + +record["--qty"];
+    context = context + +record.qty;
     return context;
   }, 0);
   let message = "";
@@ -12,10 +12,10 @@ const joinBeverageCount = function(result) {
 const joinHeader = function(result, toJson) {
   const header = "\nEmployeeId,Beverage,Quantity,Date\n";
   const records = result.map(transaction => {
-    const empId = transaction["--empId"];
-    const beverage = transaction["--beverage"];
-    const qty = transaction["--qty"];
-    let date = transaction["--date"];
+    const empId = transaction.empId;
+    const beverage = transaction.beverage;
+    const qty = transaction.qty;
+    let date = transaction.date;
     if (toJson) date = date.toJSON();
     return `${empId},${beverage},${qty},${date}`;
   });
