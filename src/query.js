@@ -1,3 +1,5 @@
+const { loadTransactions, getDefinedKeys } = require("./utils");
+
 const createFilter = function(key, value) {
   return function(records) {
     const filteredRecords = records.filter(record => {
@@ -11,19 +13,8 @@ const createFilter = function(key, value) {
   };
 };
 
-const getValidKeys = function(transaction) {
-  const keys = Object.keys(transaction);
-  const validKeys = [];
-  for (key of keys) {
-    if (transaction[key] != undefined) {
-      validKeys.push(key);
-    }
-  }
-  return validKeys;
-};
-
 const filterRecords = function(records, transaction) {
-  const keys = getValidKeys(transaction);
+  const keys = getDefinedKeys(transaction);
   if (keys.length == 0) return [];
   const filters = keys.map(key => createFilter(key, transaction[key]));
   let filteredRecords = records;
@@ -33,25 +24,16 @@ const filterRecords = function(records, transaction) {
   return filteredRecords;
 };
 
-const getRecords = function(config) {
-  let contents = "[]";
-  if (config.exists(config.filename)) {
-    contents = config.readFile(config.filename, "utf8");
-  }
-  const recordsAsJSON = JSON.parse(contents);
-  return recordsAsJSON;
-};
-
 const query = function(transaction, config) {
   if (transaction.error != undefined) return transaction;
-  const records = getRecords(config);
+  const records = loadTransactions(config);
   const userTransactions = filterRecords(records, transaction);
   if (userTransactions.error != undefined) return userTransactions;
   return userTransactions;
 };
 
 module.exports = {
+  query,
   filterRecords,
-  getRecords,
-  query
+  createFilter
 };

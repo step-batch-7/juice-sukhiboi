@@ -4,6 +4,6 @@ todo.txt
 .DS_Store
 test/.DS_Store
 src/.DS_Store
-test/appTest/dummyBeverageRecords.json
-test/appTest/failures.txt
+appTest/.DS_Store
 beverageRecords.json
+folderStructure.js

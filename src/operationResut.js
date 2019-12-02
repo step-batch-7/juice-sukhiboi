@@ -24,6 +24,6 @@ const joinHeader = function(result, toJson) {
 };
 
 module.exports = {
-  joinHeader,
-  joinBeverageCount
+  joinBeverageCount,
+  joinHeader
 };

@@ -51,7 +51,7 @@ describe("#joinBeverageCount()", () => {
         "--beverage": "Orange",
         "--qty": "1",
         "--date": "2019-12-01T17:34:30.323Z"
-      },
+      }
     ];
     const actual = joinBeverageCount(result);
     const expected = "\nTotal: 1 Juice";

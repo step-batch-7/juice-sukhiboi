@@ -6,7 +6,7 @@ const {
   isValidDate,
   formatTransaction,
   validateTransaction
-} = require("../src/validateTransaction");;
+} = require("../src/validateTransaction");
 
 describe("#isValidBeverage()", () => {
   it("should validate beverage", () => {
@@ -79,14 +79,14 @@ describe("#isValidDate()", () => {
 
 describe("#formatTransaction()", () => {
   it("should parse traction to a object with given keys", () => {
-    const options = ["--beverage", "--empId", "--qty"]
+    const options = ["--beverage", "--empId", "--qty"];
     const args = ["--beverage", "Orange", "--empId", "123", "--qty", "7"];
     const actual = formatTransaction(args, options);
     const expected = {
       "--beverage": "Orange",
       "--empId": "123",
       "--qty": "7"
-    }
+    };
     assert.deepStrictEqual(actual, expected);
   });
 });
@@ -97,7 +97,7 @@ describe("#validateTransaction()", () => {
     const actual = validateTransaction(args);
     const expected = false;
     assert.deepStrictEqual(actual, expected);
-  })
+  });
   it("should validate the save command for correct options", () => {
     const args = "--save --beverage Orange --empId 11111 --qty 1".split(" ");
     const actual = validateTransaction(args);
@@ -105,7 +105,9 @@ describe("#validateTransaction()", () => {
     assert.deepStrictEqual(actual, expected);
   });
   it("should invalidate the save command for incorrect options given", () => {
-    const args = "--save --beverage Orange --empId 11111q --quantity 1".split(" ");
+    const args = "--save --beverage Orange --empId 11111q --quantity 1".split(
+      " "
+    );
     const actual = validateTransaction(args);
     const expected = false;
     assert.deepStrictEqual(actual, expected);

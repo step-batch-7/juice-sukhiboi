@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { executeTransaction } = require("./src/utils");
+const { executeTransaction } = require("./src/transactionLib");
 
 const main = function(args) {
   const envDate = new Date(process.env.date);

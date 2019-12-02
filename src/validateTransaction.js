@@ -1,3 +1,5 @@
+const { optionParser } = require("./optionLib");
+
 const isValidBeverage = function(beverage) {
   if (beverage == undefined) return beverage;
   return beverage !== "" && beverage !== undefined;
@@ -18,11 +20,7 @@ const formatTransaction = function(args, options) {
   options.map(option => {
     transactionDetails[option] = undefined;
   });
-  for (let idx = 0; idx < args.length; idx += 2) {
-    if (args[idx] in transactionDetails) {
-      transactionDetails[args[idx]] = args[idx + 1];
-    }
-  }
+  transactionDetails = optionParser(transactionDetails, args);
   return transactionDetails;
 };
 
@@ -50,8 +48,8 @@ const queryValidator = function(transactionDetails, validations) {
 const validateTransaction = function(args) {
   const userArgs = args.slice(1);
   if (userArgs.length % 2 !== 0 || userArgs.length < 1) {
-    return false
-  };
+    return false;
+  }
   const option = args[0];
   const validOptions = {
     "--save": {
@@ -66,7 +64,7 @@ const validateTransaction = function(args) {
     }
   };
   const command = validOptions[option];
-  if(command == undefined) return false;
+  if (command == undefined) return false;
   const transactionDetails = formatTransaction(userArgs, command.options);
   const isValid = command.validator(transactionDetails, command.validation);
   return isValid;

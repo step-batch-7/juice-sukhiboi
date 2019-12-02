@@ -1,6 +1,6 @@
 const chai = require("chai");
 const assert = chai.assert;
-const { filterRecords, getRecords, query } = require("./../src/query");
+const { filterRecords, loadTransactions, query } = require("./../src/query");
 
 describe("#filterRecords()", () => {
   it("should filter records when only employee id is given", () => {
@@ -138,39 +138,6 @@ describe("#filterRecords()", () => {
   });
 });
 
-describe("#getRecords()", () => {
-  it("should give all the records from the file given", () => {
-    const readFile = function(filename, encoding) {
-      assert.equal(filename, "./beverageRecords.json");
-      assert.equal(encoding, "utf8");
-      const contents =
-        '[{"--beverage":"Orange","--qty":"5","--date":"2019-11-25T06:16:09.419Z","--empId":"11111"}]';
-      return contents;
-    };
-    const existsSync = function(filename) {
-      assert.equal(filename, "./beverageRecords.json");
-      return true;
-    };
-    const config = {
-      filename: "./beverageRecords.json",
-      date: new Date(),
-      readFile: readFile,
-      writeFile: undefined,
-      exists: existsSync
-    };
-    const actual = getRecords(config);
-    const expected = [
-      {
-        "--beverage": "Orange",
-        "--qty": "5",
-        "--date": "2019-11-25T06:16:09.419Z",
-        "--empId": "11111"
-      }
-    ];
-    assert.deepStrictEqual(actual, expected);
-  });
-});
-
 describe("#query()", () => {
   it("should return error when employee option is not given", () => {
     const transaction = { "--empId": undefined };
@@ -198,7 +165,7 @@ describe("#query()", () => {
     assert.deepStrictEqual(actual, expected);
   });
   it("should return error when employee id doesn't exists", () => {
-    const transaction = {"--empId": 11111};
+    const transaction = { "--empId": 11111 };
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
@@ -223,7 +190,7 @@ describe("#query()", () => {
     assert.deepStrictEqual(actual, expected);
   });
   it("should return transaction of the given employee", () => {
-    const transaction = {"--empId": 21};
+    const transaction = { "--empId": 21 };
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
