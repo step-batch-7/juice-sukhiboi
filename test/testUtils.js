@@ -11,7 +11,6 @@ describe("#updateTransactions()", () => {
       "--date": date,
       "--empId": "11111"
     };
-    const filename = "./beverageRecords.json";
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
@@ -57,7 +56,6 @@ describe("#updateTransactions()", () => {
       "--date": date,
       "--empId": "11111"
     };
-    const filename = "./beverageRecords.json";
     const readFile = function(filename, encoding) {
       assert.equal(filename, "./beverageRecords.json");
       assert.equal(encoding, "utf8");
@@ -93,6 +91,49 @@ describe("#updateTransactions()", () => {
     };
     assert.deepStrictEqual(actual, expected);
   });
+  it("should save transaction when required file is empty", () => {
+    const date = new Date();
+    const record = {
+      "--beverage": "Orange",
+      "--qty": "2",
+      "--date": date,
+      "--empId": "11111"
+    };
+    const readFile = function(filename, encoding) {
+      assert.equal(filename, "./beverageRecords.json");
+      assert.equal(encoding, "utf8");
+      return '';
+    };
+    const writeFile = function(filename, record) {
+      const expectedFilename = "./beverageRecords.json";
+      const expectedRecord =
+        '[{"--beverage":"Orange","--qty":"2","--date":"' +
+        date.toJSON() +
+        '","--empId":"11111"}]';
+      assert.equal(filename, expectedFilename);
+      assert.equal(record, expectedRecord);
+      return true;
+    };
+    const existsSync = function(filename) {
+      assert.strictEqual(filename, "./beverageRecords.json");
+      return false;
+    };
+    const config = {
+      filename: "./beverageRecords.json",
+      date: date,
+      readFile: readFile,
+      writeFile: writeFile,
+      exists: existsSync
+    };
+    const actual = updateTransactions(record, config);
+    const expected = {
+      "--beverage": "Orange",
+      "--date": date,
+      "--qty": "2",
+      "--empId": "11111"
+    };
+    assert.deepStrictEqual(actual, expected);
+  })
 });
 
 describe("#loadTransactions()", () => {

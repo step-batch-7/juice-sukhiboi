@@ -2,6 +2,9 @@ const updateTransactions = function(record, config) {
   let contents = "[]";
   if (config.exists(config.filename)) {
     contents = config.readFile(config.filename, "utf8");
+    if (contents == "") {
+      contents = "[]";
+    }
   }
   const recordData = JSON.parse(contents);
   recordData.push(record);
