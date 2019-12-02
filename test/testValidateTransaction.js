@@ -92,6 +92,12 @@ describe("#formatTransaction()", () => {
 });
 
 describe("#validateTransaction()", () => {
+  it("should invalidate wrong command is given", () => {
+    const args = ["--sav"];
+    const actual = validateTransaction(args);
+    const expected = false;
+    assert.deepStrictEqual(actual, expected);
+  })
   it("should validate the save command for correct options", () => {
     const args = "--save --beverage Orange --empId 11111 --qty 1".split(" ");
     const actual = validateTransaction(args);

@@ -66,6 +66,7 @@ const validateTransaction = function(args) {
     }
   };
   const command = validOptions[option];
+  if(command == undefined) return false;
   const transactionDetails = formatTransaction(userArgs, command.options);
   const isValid = command.validator(transactionDetails, command.validation);
   return isValid;

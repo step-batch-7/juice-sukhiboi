@@ -6,7 +6,6 @@ const {
   getTransactionPrototype,
   updateTransactionDetails,
   parseTransaction,
-  errorMessage,
   executeTransaction
 } = require("./../src/utils");
 
@@ -37,12 +36,6 @@ describe("#getOperation()", function() {
     const expected = query;
     assert.deepStrictEqual(actual, expected);
   });
-  it("should return error message when wrong command is given", () => {
-    const args = "--command --empId 12345";
-    const actual = getOperation(args);
-    const expected = errorMessage;
-    assert.deepStrictEqual(actual, expected);
-  });
 });
 
 describe("#getTransactionPrototype()", () => {
@@ -63,12 +56,6 @@ describe("#getTransactionPrototype()", () => {
       "--date": undefined
     };
     const operation = "--query";
-    const actual = getTransactionPrototype(operation);
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should return error when wrong command is given", () => {
-    const expected = { error: "Invalid Command" };
-    const operation = "--command";
     const actual = getTransactionPrototype(operation);
     assert.deepStrictEqual(actual, expected);
   });
@@ -133,33 +120,6 @@ describe("#parseTransaction()", function() {
       "--empId": undefined,
       "--beverage": undefined
     };
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should return error when user options are invalid", () => {
-    const args = "--query --empId 12345q".split(" ");
-    const actual = parseTransaction(args);
-    const expected = {
-      error: "Invalid Options"
-    };
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should return error when wrong command is given", () => {
-    const args = "--command --empId 12345";
-    const actual = parseTransaction(args);
-    const expected = {
-      error: "Invalid Command"
-    };
-    assert.deepStrictEqual(actual, expected);
-  });
-});
-
-describe("#errorMessage()", () => {
-  it("should return the object that is given as argument", () => {
-    const error = {
-      error: "Invalid Command"
-    };
-    const actual = errorMessage(error);
-    const expected = error;
     assert.deepStrictEqual(actual, expected);
   });
 });
@@ -240,7 +200,7 @@ describe("#executeTransaction()", () => {
       exists: undefined
     };
     const actual = executeTransaction(args, config);
-    const expected = "\nInvalid Options";
+    const expected = "\nerror";
     assert.strictEqual(actual, expected);
   });
   it("should given error if wrong option given for query command", () => {
@@ -253,7 +213,7 @@ describe("#executeTransaction()", () => {
       exists: undefined
     };
     const actual = executeTransaction(args, config);
-    const expected = "\nInvalid Options";
+    const expected = "\nerror";
     assert.strictEqual(actual, expected);
   });
 });

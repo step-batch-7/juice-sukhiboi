@@ -8,10 +8,6 @@ const formatArgs = function(args) {
   return userArgs;
 };
 
-const errorMessage = function(object) {
-  return object;
-};
-
 const getOperation = function(args) {
   const availableOptions = {
     "--save": saveRecord,
@@ -19,9 +15,6 @@ const getOperation = function(args) {
   };
   const operationName = args[0];
   let operation = availableOptions[operationName];
-  if (operation == undefined) {
-    operation = errorMessage;
-  }
   return operation;
 };
 
@@ -38,13 +31,7 @@ const getTransactionPrototype = function(operation) {
       "--date": undefined
     }
   };
-
-  const prototype = transactionPrototypes[operation];
-  const errorObj = { error: "Invalid Command" };
-  if (prototype == undefined) {
-    return errorObj;
-  }
-  return prototype;
+  return transactionPrototypes[operation];
 };
 
 const updateTransactionDetails = function(transactionDetails, args) {
@@ -60,21 +47,17 @@ const updateTransactionDetails = function(transactionDetails, args) {
 const parseTransaction = function(args) {
   const operation = args[0];
   const transactionDetails = getTransactionPrototype(operation);
-  if (transactionDetails.error != undefined) return transactionDetails;
   const transaction = updateTransactionDetails(transactionDetails, args);
-  const result = validateTransaction(args);
-  if (result) return transaction;
-  return { error: "Invalid Options" };
+  return transaction;
 };
 
 const executeTransaction = function(args, config) {
   const userArgs = formatArgs(args);
+  const validTransaction = validateTransaction(userArgs);
+  if(!validTransaction) return "\nerror";
   const operation = getOperation(userArgs);
   const transaction = parseTransaction(userArgs);
   const result = operation(transaction, config);
-  if (result.error != undefined) {
-    return `\n${result.error}`;
-  }
   let message = "";
   if(userArgs[0] == "--save"){
     const transactionSavedMsg = "\nTransaction Recorded:";
@@ -92,7 +75,6 @@ module.exports = {
   getTransactionPrototype,
   updateTransactionDetails,
   parseTransaction,
-  errorMessage,
   validateTransaction,
   executeTransaction
 };

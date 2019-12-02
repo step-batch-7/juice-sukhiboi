@@ -5,5 +5,5 @@ todo.txt
 test/.DS_Store
 src/.DS_Store
 test/appTest/dummyBeverageRecords.json
-test/appTest/failure.txt
+test/appTest/failures.txt
 beverageRecords.json
