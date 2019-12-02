@@ -2,7 +2,6 @@
 ### An app to mantain the records of beverage 
 
 ## Installation
----
 Use [git](https://git-scm.com/) to install this app and [npm](https://www.npmjs.com/) to install dependencies
 
 ```bash
@@ -12,7 +11,6 @@ npm install
 ```
 
 ## Usage
----
 ### You have to use this app with [node](https://nodejs.org/en). This app allow you to
 
 #### Save a beverage transaction
