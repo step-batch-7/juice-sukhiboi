@@ -1,0 +1,5 @@
+(export filename="./appTest/dummyBeverageRecords_queryCommand.json";node beverage.js --query --beverage Orange) 
+EmployeeId,Beverage,Quantity,Date
+11111,Orange,1,2019-11-30T00:00:00.000Z
+11111,Orange,1,2019-11-29T00:00:00.000Z
+Total: 2 Juices
