@@ -85,7 +85,7 @@ describe("#executeTransaction()", () => {
     };
     const actual = executeTransaction(args, config);
     const expected =
-      "\nTransaction Recorded:\nEmployeeId,Beverage,Quantity,Date\n11111,Orange,2," +
+      "Transaction Recorded:\nEmployeeId,Beverage,Quantity,Date\n11111,Orange,2," +
       config.date.toJSON();
     assert.deepStrictEqual(actual, expected);
   });
@@ -112,7 +112,7 @@ describe("#executeTransaction()", () => {
     };
     const actual = executeTransaction(args, config);
     const expected =
-      "\nEmployeeId,Beverage,Quantity,Date\n11111,Orange,5,2019-11-25T06:16:09.419Z\nTotal: 5 Juices";
+      "EmployeeId,Beverage,Quantity,Date\n11111,Orange,5,2019-11-25T06:16:09.419Z\nTotal: 5 Juices";
     assert.deepStrictEqual(actual, expected);
   });
   it("should given error if wrong option given for save command", () => {
@@ -125,7 +125,7 @@ describe("#executeTransaction()", () => {
       exists: undefined
     };
     const actual = executeTransaction(args, config);
-    const expected = "\nerror";
+    const expected = "Error: Invalid Command or Option(s)";
     assert.strictEqual(actual, expected);
   });
   it("should given error if wrong option given for query command", () => {
@@ -138,7 +138,7 @@ describe("#executeTransaction()", () => {
       exists: undefined
     };
     const actual = executeTransaction(args, config);
-    const expected = "\nerror";
+    const expected = "Error: Invalid Command or Option(s)";
     assert.strictEqual(actual, expected);
   });
 });

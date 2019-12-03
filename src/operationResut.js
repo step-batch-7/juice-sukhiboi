@@ -10,7 +10,7 @@ const joinBeverageCount = function(result) {
 };
 
 const joinHeader = function(result, toJson) {
-  const header = "\nEmployeeId,Beverage,Quantity,Date\n";
+  const header = "EmployeeId,Beverage,Quantity,Date\n";
   const records = result.map(transaction => {
     const empId = transaction.empId;
     const beverage = transaction.beverage;

@@ -13,13 +13,13 @@ const parseTransaction = function(args) {
 const executeTransaction = function(args, config) {
   const userArgs = args.slice(2);
   const validTransaction = validateTransaction(userArgs);
-  if (!validTransaction) return "\nerror";
+  if (!validTransaction) return "Error: Invalid Command or Option(s)";
   const operation = getOperation(userArgs);
   const transaction = parseTransaction(userArgs);
   const result = operation(transaction, config);
   let message = "";
   if (userArgs[0] == "--save") {
-    const transactionSavedMsg = "\nTransaction Recorded:";
+    const transactionSavedMsg = "Transaction Recorded:\n";
     const toJson = true;
     let message = transactionSavedMsg + joinHeader(result, toJson);
     return message;

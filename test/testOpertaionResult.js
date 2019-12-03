@@ -16,7 +16,7 @@ describe("#joinHearder()", () => {
     const toJson = true;
     const actual = joinHeader(result, toJson);
     const expected =
-      "\nEmployeeId,Beverage,Quantity,Date\n11111,Orange,3," + date.toJSON();
+      "EmployeeId,Beverage,Quantity,Date\n11111,Orange,3," + date.toJSON();
     assert.strictEqual(actual, expected);
   });
   it("should append the header at the begining for query command", () => {
@@ -36,7 +36,7 @@ describe("#joinHearder()", () => {
     ];
     const actual = joinHeader(result);
     const expected =
-      "\nEmployeeId,Beverage,Quantity,Date\n" +
+      "EmployeeId,Beverage,Quantity,Date\n" +
       "11111,Orange,3,2019-12-01T17:34:30.323Z\n" +
       "11111,Orange,7,2019-12-01T17:34:30.323Z";
     assert.strictEqual(actual, expected);
